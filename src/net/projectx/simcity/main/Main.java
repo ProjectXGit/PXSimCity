@@ -22,12 +22,15 @@ public class Main extends JavaPlugin implements Plugin {
     }
 
     @Override
+
+
+
     public void onDisable() {
 
     }
 
     public static void registerCommands() {
-
+        //*LOOOOOOOOOOOOOOOOL
     }
 
     public static void registerListener() {
