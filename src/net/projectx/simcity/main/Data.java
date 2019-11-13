@@ -1,5 +1,6 @@
 package net.projectx.simcity.main;
 
+
 import org.bukkit.plugin.Plugin;
 
 /**
