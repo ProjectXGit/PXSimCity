@@ -1,0 +1,4 @@
+name: PXSimCity
+version: Alpha
+main: net.projectx.simcity.main.Main
+author: Iclipse
