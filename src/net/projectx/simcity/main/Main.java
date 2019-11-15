@@ -2,7 +2,7 @@ package net.projectx.simcity.main;
 
 
 import net.projectx.simcity.functions.JoinListener;
-import net.projectx.simcity.functions.MySQL.MySQL;
+import net.projectx.simcity.functions.mysql.MySQL;
 import net.projectx.simcity.functions.Scheduler;
 import net.projectx.simcity.functions.Tablist;
 import org.bukkit.Bukkit;

@@ -1,4 +1,4 @@
-package net.projectx.simcity.functions.MySQL;
+package net.projectx.simcity.functions.mysql;
 
 import org.bukkit.Location;
 
