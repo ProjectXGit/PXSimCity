@@ -41,7 +41,6 @@ public class Tablist {
         header = "§8« " + Data.prefix.replaceAll(Data.symbol, "") + "§8 »";
         footer = "§eSimCity 1.0";
         port = "\n§7Port: §e" + Bukkit.getPort();
-        ranks = "§1Admin §4Mod §9Dev §cSup §2Builder\n §5YouTuber §3Premium";
 
         this.buergermeister = sb.getTeam("1a") == null ? sb.registerNewTeam("1a") : sb.getTeam("1a");
         this.foerster = sb.getTeam("2b") == null ? sb.registerNewTeam("2b") : sb.getTeam("2b");
@@ -71,7 +70,7 @@ public class Tablist {
             p.setPlayerListHeader(header + port);
         } else p.setPlayerListHeader(header);
 
-        p.setPlayerListFooter(ranks + "\n" + footer);
+        p.setPlayerListFooter(footer);
     }
 
 
