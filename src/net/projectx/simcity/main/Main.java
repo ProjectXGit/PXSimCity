@@ -2,9 +2,10 @@ package net.projectx.simcity.main;
 
 
 import net.projectx.simcity.functions.JoinListener;
-import net.projectx.simcity.functions.mysql.MySQL;
+import net.projectx.simcity.functions.SafeChest;
 import net.projectx.simcity.functions.Scheduler;
 import net.projectx.simcity.functions.Tablist;
+import net.projectx.simcity.functions.mysql.MySQL;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,6 +42,7 @@ public class Main extends JavaPlugin implements Plugin {
 
     public void registerListener() {
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
+        Bukkit.getPluginManager().registerEvents(new SafeChest(), this);
     }
 
 }

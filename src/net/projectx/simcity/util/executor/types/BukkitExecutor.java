@@ -1,10 +1,10 @@
 package net.projectx.simcity.util.executor.types;
 
 
-import net.projectx.api.main.Data;
-import net.projectx.api.util.executor.Callback;
-import net.projectx.api.util.executor.IExecutor;
-import net.projectx.api.util.executor.ResultRunnable;
+import net.projectx.simcity.main.Data;
+import net.projectx.simcity.util.executor.Callback;
+import net.projectx.simcity.util.executor.IExecutor;
+import net.projectx.simcity.util.executor.ResultRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 

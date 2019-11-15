@@ -31,7 +31,7 @@ public class Tablist {
     private Team schmied;
     private Team farmer;
     private Team zuechter;
-    private Team architekt;
+    private Team arbeitslos;
 
 
     private HashMap<Player, String> rankColor = new HashMap<>();
@@ -49,7 +49,7 @@ public class Tablist {
         this.schmied = sb.getTeam("5e") == null ? sb.registerNewTeam("5e") : sb.getTeam("5e");
         this.farmer = sb.getTeam("6f") == null ? sb.registerNewTeam("6f") : sb.getTeam("6f");
         this.zuechter = sb.getTeam("7g") == null ? sb.registerNewTeam("7g") : sb.getTeam("7g");
-        //this.architekt = sb.getTeam("8h") == null ? sb.registerNewTeam("8h") : sb.getTeam("8h");
+        this.arbeitslos = sb.getTeam("8h") == null ? sb.registerNewTeam("8h") : sb.getTeam("8h");
 
 
         this.buergermeister.setPrefix("§8[§1Bürgermeister§8]§7 ");
@@ -59,7 +59,7 @@ public class Tablist {
         this.schmied.setPrefix("§8[§bSchmied§8]§7 ");
         this.farmer.setPrefix("§8[§5Farmer§8]§7 ");
         this.zuechter.setPrefix("§8[§dTierzüchter§8]§7 ");
-        //this.architekt.setPrefix("§8[§ ");
+        this.arbeitslos.setPrefix("§8[§0Arbeitslos§1]§7 ");
     }
 
 
@@ -91,6 +91,8 @@ public class Tablist {
             team = "6f";
         } else if (MySQL_User.getJob(p.getUniqueId()).equalsIgnoreCase("Tierzuechter")) {
             team = "7g";
+        } else {
+            team = "8h";
         }
         if (!sb.getTeam(team).hasPlayer(Bukkit.getOfflinePlayer(p.getUniqueId())))
             sb.getTeam(team).addPlayer(Bukkit.getOfflinePlayer(p.getUniqueId()));
