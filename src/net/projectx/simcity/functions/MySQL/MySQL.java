@@ -1,4 +1,4 @@
-package net.projectx.simcity.functions.MySQL;
+package net.projectx.simcity.functions.mysql;
 
 import net.projectx.simcity.main.Data;
 import org.bukkit.ChatColor;
@@ -10,11 +10,9 @@ import java.io.IOException;
 import java.sql.*;
 
 /**
- * Created by Yannick who could get really angry if somebody steal his code!
- * ~Yannick on 08.06.2019 at 21:09 o´ clock
+ * ~Yannick on 13.11.2019 at 18:58 o´ clock
  */
 public class MySQL {
-
     public static File getMySQLFile() {
         return new File("plugins/" + Data.instance.getDescription().getName(), "mysql.yml");
     }
@@ -110,5 +108,4 @@ public class MySQL {
         }
         return rs;
     }
-
 }
