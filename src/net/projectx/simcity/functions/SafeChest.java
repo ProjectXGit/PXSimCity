@@ -1,19 +1,14 @@
 package net.projectx.simcity.functions;
 
-import net.projectx.simcity.functions.MySQL.MySQL;
-import net.projectx.simcity.functions.MySQL.MySQL_SafeChest;
+import net.projectx.simcity.functions.mysql.MySQL_SafeChest;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
-import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.sql.ResultSet;
 import java.util.UUID;
 
 public class SafeChest implements Listener {
@@ -30,6 +25,8 @@ public class SafeChest implements Listener {
             }
         }
     }
+
+    @EventHandler
     public void activateChest(BlockPlaceEvent sign) {
         UUID uuid = sign.getPlayer().getUniqueId();
         Location loc = sign.getBlockAgainst().getLocation();
@@ -44,13 +41,15 @@ public class SafeChest implements Listener {
             }
         }
     }
+
+    @EventHandler
     public void deactivateChest(BlockBreakEvent sign) {
         UUID uuid = sign.getPlayer().getUniqueId();
         Location loc = sign.getBlock().getLocation();
         if(sign.getBlock().getType()==Material.OAK_WALL_SIGN){
-           if(MySQL_SafeChest.isSignNearChest(loc)){
-               MySQL_SafeChest.deleteChest(uuid,MySQL_SafeChest.isSignNearChestGetLocation(loc));
-           }
+            if (MySQL_SafeChest.isSignNearChest(loc)) {
+                MySQL_SafeChest.deleteChest(uuid, MySQL_SafeChest.isSignNearChestGetLocation(loc));
+            }
         }
     }
 
