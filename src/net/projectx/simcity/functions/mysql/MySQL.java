@@ -10,9 +10,11 @@ import java.io.IOException;
 import java.sql.*;
 
 /**
- * ~Yannick on 13.11.2019 at 18:58 o´ clock
+ * Created by Yannick who could get really angry if somebody steal his code!
+ * ~Yannick on 08.06.2019 at 21:09 o´ clock
  */
 public class MySQL {
+
     public static File getMySQLFile() {
         return new File("plugins/" + Data.instance.getDescription().getName(), "mysql.yml");
     }
@@ -108,4 +110,5 @@ public class MySQL {
         }
         return rs;
     }
+
 }

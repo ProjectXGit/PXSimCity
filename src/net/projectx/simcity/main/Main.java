@@ -1,7 +1,11 @@
 package net.projectx.simcity.main;
 
 
+import net.projectx.simcity.functions.JoinListener;
 import net.projectx.simcity.functions.MySQL.MySQL;
+import net.projectx.simcity.functions.Scheduler;
+import net.projectx.simcity.functions.Tablist;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,18 +26,21 @@ public class Main extends JavaPlugin implements Plugin {
         registerCommands();
         registerListener();
         MySQL.connect();
+        Data.tablist = new Tablist();
+        Scheduler.startScheduler();
     }
 
     @Override
     public void onDisable() {
+        Scheduler.stopScheduler();
+    }
+
+    public void registerCommands() {
 
     }
 
-    public static void registerCommands() {
-        //*LOOOOOOOOOOOOOOOOL MIT MEHR OOOOOOOOOO
+    public void registerListener() {
+        Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
     }
 
-    public static void registerListener() {
-
-    }
 }
