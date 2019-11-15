@@ -1,6 +1,7 @@
 package net.projectx.simcity.main;
 
 
+import net.projectx.simcity.functions.MySQL.MySQL;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,6 +21,7 @@ public class Main extends JavaPlugin implements Plugin {
         Data.instance = this;
         registerCommands();
         registerListener();
+        MySQL.connect();
     }
 
     @Override
