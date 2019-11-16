@@ -16,7 +16,7 @@ public class SafeChest implements Listener {
     @EventHandler
     public void openChest(PlayerInteractEvent ce) {
         if (ce.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            if (ce.getPlayer().isSneaking()) {
+            if (!ce.getPlayer().isSneaking()) {
                 if (ce.getClickedBlock().getType().equals(Material.CHEST)) {
 
                     UUID uuid = ce.getPlayer().getUniqueId();
