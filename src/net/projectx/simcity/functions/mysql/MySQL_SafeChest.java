@@ -3,7 +3,7 @@ package net.projectx.simcity.functions.mysql;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.type.Sign;
+import org.bukkit.material.Sign;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -114,8 +114,8 @@ public class MySQL_SafeChest {
     }
     public static Block getAttachedBlock(Block sb) {
         if (sb.getType() == Material.OAK_WALL_SIGN) {
-            Sign s = (Sign) sb.getState().getData();  // org.bukkit.material.Sign
-            return sb.getRelative(s.getRotation());
+            Sign s = (Sign) sb.getState().getData();
+            return sb.getRelative(s.getAttachedFace());
         } else {
             return null;
         }
