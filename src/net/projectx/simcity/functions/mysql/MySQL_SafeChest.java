@@ -60,13 +60,13 @@ public class MySQL_SafeChest {
     }
     public static boolean isSignNearChest(Location loc) {
         Location loc1 = loc;
-        loc1.setX(loc1.getBlockX()+1);
+        loc1.setX(loc1.getX()+1);
         Location loc2 = loc;
-        loc1.setX(loc1.getBlockX()-1);
+        loc1.setX(loc1.getX()-1);
         Location loc3 = loc;
-        loc1.setZ(loc1.getBlockZ()+1);
+        loc1.setZ(loc1.getZ()+1);
         Location loc4 = loc;
-        loc1.setZ(loc1.getBlockZ()-1);
+        loc1.setZ(loc1.getZ()-1);
         if(isChestOf(loc1)||isChestOf(loc2)||isChestOf(loc3)||isChestOf(loc4)){
             System.out.println("Schild ist neben kiste");
             return true;
