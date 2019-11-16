@@ -3,6 +3,7 @@ package net.projectx.simcity.functions;
 import net.projectx.simcity.functions.mysql.MySQL_SafeChest;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -15,15 +16,22 @@ import java.util.UUID;
 public class SafeChest implements Listener {
     @EventHandler
     public void openChest(PlayerInteractEvent ce) {
+        Player p = ce.getPlayer();
+        p.sendMessage("Event wurde ausgelöst");
         if (ce.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            p.sendMessage("Es wurde Rechtsklick gemacht");
             if (!ce.getPlayer().isSneaking()) {
+                p.sendMessage("Es wurde nicht gesneakt");
                 if (ce.getClickedBlock().getType().equals(Material.CHEST)) {
+                    p.sendMessage("Es wurde eine Kiste geöffnet");
 
                     UUID uuid = ce.getPlayer().getUniqueId();
                     Location loc = ce.getClickedBlock().getLocation();
                     if (MySQL_SafeChest.isChestOf(uuid, loc)) {
+                        p.sendMessage("Die Kiste gehört dem Spieler");
                         return;
                     } else {
+                        p.sendMessage("Du darfst diese Kiste nicht öffen");
                         ce.setCancelled(true);
                     }
                 }
