@@ -74,7 +74,7 @@ public class Tablist {
     }
 
 
-    public void setPlayer(Player p) {
+    public void setPlayer(Player p, Scoreboard sb) {
         String team = "";
         team = "";
         if (MySQL_User.getJob(p.getUniqueId()).equalsIgnoreCase("Buergermeister")) {

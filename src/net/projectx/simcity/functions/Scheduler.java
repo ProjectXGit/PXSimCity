@@ -24,10 +24,14 @@ public class Scheduler {
         scheduler = Bukkit.getScheduler().runTaskTimer(Data.instance, new Runnable() {
             @Override
             public void run() {
-                for (Scoreboard scoreboard : boards.keySet()) {
-                    Player p = boards.get(scoreboard);
+                for (Player p : boards.keySet()) {
+                    Scoreboard scoreboard = boards.get(p);
                     scoreboard.getTeam("dukatenanz").setPrefix("§6" + MySQL_User.getDukaten(p.getUniqueId()));
-                    scoreboard.getTeam("jobwert").setPrefix("§6" + MySQL_User.getJob(p.getUniqueId()));
+                    if (MySQL_User.getJob(p.getUniqueId()).length() > 1) {
+                        scoreboard.getTeam("jobwert").setPrefix("§6" + MySQL_User.getJob(p.getUniqueId()));
+                    } else {
+                        scoreboard.getTeam("jobwert").setPrefix("§4Arbeitslos");
+                    }
                 }
             }
         }, 0, 20);
@@ -37,7 +41,7 @@ public class Scheduler {
         scheduler.cancel();
     }
 
-    private static HashMap<Scoreboard, Player> boards = new HashMap<>();
+    public static HashMap<Player, Scoreboard> boards = new HashMap<>();
 
 
     public static void createScoreboard(Player p) {
@@ -66,7 +70,8 @@ public class Scheduler {
         sidebar.getScore(ChatColor.BLACK.toString()).setScore(3);
 
         Team jobwert = scoreboard.registerNewTeam("jobwert");
-        if (!MySQL_User.getJob(p.getUniqueId()).equals("")) {
+        System.out.println("|" + MySQL_User.getJob(p.getUniqueId()) + "|");
+        if (MySQL_User.getJob(p.getUniqueId()).length() > 1) {
             jobwert.setPrefix("§6" + MySQL_User.getJob(p.getUniqueId()));
         } else {
             jobwert.setPrefix("§4Arbeitslos");
@@ -74,7 +79,7 @@ public class Scheduler {
         jobwert.addEntry(ChatColor.BOLD.toString());
         sidebar.getScore(ChatColor.BOLD.toString()).setScore(2);
 
-        boards.put(scoreboard, p);
+        boards.put(p, scoreboard);
         p.setScoreboard(scoreboard);
 
 

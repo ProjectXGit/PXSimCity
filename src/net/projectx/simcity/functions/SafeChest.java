@@ -16,54 +16,58 @@ public class SafeChest implements Listener {
     @EventHandler
     public void openChest(PlayerInteractEvent ce) {
         if (ce.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            if (ce.getClickedBlock().getType().equals(Material.CHEST)) {
+            if (ce.getPlayer().isSneaking()) {
+                if (ce.getClickedBlock().getType().equals(Material.CHEST)) {
 
-                UUID uuid = ce.getPlayer().getUniqueId();
-                Location loc = ce.getClickedBlock().getLocation();
-                if (MySQL_SafeChest.isChestOf(uuid, loc)) {
-                    return;
-                } else {
-                    ce.setCancelled(true);
+                    UUID uuid = ce.getPlayer().getUniqueId();
+                    Location loc = ce.getClickedBlock().getLocation();
+                    if (MySQL_SafeChest.isChestOf(uuid, loc)) {
+                        return;
+                    } else {
+                        ce.setCancelled(true);
+                    }
                 }
             }
         }
     }
+
     @EventHandler
-    public void activateChest(BlockPlaceEvent sign) {
-        UUID uuid = sign.getPlayer().getUniqueId();
-        Location loc = sign.getBlockAgainst().getLocation();
-        if (sign.getBlock().getType().equals(Material.OAK_WALL_SIGN)) {
+    public void activateChest(BlockPlaceEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
+        Location loc = event.getBlockAgainst().getLocation();
+        if (event.getBlock().getType().equals(Material.OAK_WALL_SIGN)) {
 
 
-            if (sign.getBlockAgainst().getType().equals(Material.CHEST)) {
-                if(!MySQL_SafeChest.isChestOf(loc)) {
+            if (event.getBlockAgainst().getType().equals(Material.CHEST)) {
+                if (!MySQL_SafeChest.isChestOf(loc)) {
 
                     MySQL_SafeChest.safeChest(uuid, loc);
                 }
             }
         }
     }
+
     @EventHandler
     public void deactivateChest(BlockBreakEvent sign) {
 
         if (sign.getBlock().getType().equals(Material.OAK_WALL_SIGN)) {
             UUID uuid = sign.getPlayer().getUniqueId();
             Location loc = sign.getBlock().getLocation();
-           if(MySQL_SafeChest.isSignNearChest(loc)){
-               Location chest  = MySQL_SafeChest.isSignNearChestGetLocation(loc);
-               if(MySQL_SafeChest.isChestOf(uuid,chest)){
-                   MySQL_SafeChest.deleteChest(uuid,chest);
-               }else{
-                   sign.setCancelled(true);
-               }
-           }
-        }else{
+            if (MySQL_SafeChest.isSignNearChest(loc)) {
+                Location chest = MySQL_SafeChest.isSignNearChestGetLocation(loc);
+                if (MySQL_SafeChest.isChestOf(uuid, chest)) {
+                    MySQL_SafeChest.deleteChest(uuid, chest);
+                } else {
+                    sign.setCancelled(true);
+                }
+            }
+        } else {
             if (sign.getBlock().getType().equals(Material.CHEST)) {
                 UUID uuid = sign.getPlayer().getUniqueId();
                 Location chest = sign.getBlock().getLocation();
-                if(MySQL_SafeChest.isChestOf(uuid,chest)){
-                    MySQL_SafeChest.deleteChest(uuid,chest);
-                }else{
+                if (MySQL_SafeChest.isChestOf(uuid, chest)) {
+                    MySQL_SafeChest.deleteChest(uuid, chest);
+                } else {
                     sign.setCancelled(true);
                 }
             }

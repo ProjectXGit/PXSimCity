@@ -1,6 +1,7 @@
 package net.projectx.simcity.functions;
 
 import net.projectx.simcity.functions.mysql.MySQL_User;
+import net.projectx.simcity.main.Data;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +24,7 @@ public class JoinListener implements Listener {
         p.sendMessage("§aWillkommen auf dem Server!");
         tablist.setTablist(p.getUniqueId());
         Scheduler.createScoreboard(p);
+        Data.tablist.setPlayer(p, Scheduler.boards.get(p));
     }
 
 }
