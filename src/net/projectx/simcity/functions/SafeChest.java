@@ -75,7 +75,7 @@ public class SafeChest implements Listener {
             Location loc = sign.getBlock().getLocation();
             if (MySQL_SafeChest.isSignNearChest(loc)) {
                 p.sendMessage("Das Schild war an einer Kiste");
-                Location chest = MySQL_SafeChest.isSignNearChestGetLocation(loc);
+                Location chest = MySQL_SafeChest.getAttachedBlock(sign.getBlock()).getLocation();
                 if (MySQL_SafeChest.isChestOf(uuid, chest)) {
                     p.sendMessage("Die Kiste gehört diesem Spieler und wird gelöscht");
                     MySQL_SafeChest.deleteChest(uuid, chest);
