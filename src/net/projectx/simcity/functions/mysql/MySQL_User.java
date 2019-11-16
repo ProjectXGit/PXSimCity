@@ -21,7 +21,8 @@ public class MySQL_User {
     public static void createUser(Player p) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time = Date.from(Instant.now());
-        MySQL.update("INSERT INTO `user` VALUES ('" + p.getName() + "','" + p.getUniqueId().toString() + "', 0, '', 0)");
+        System.out.println();
+        MySQL.update("INSERT INTO `user` VALUES ('" + p.getName() + "','" + p.getUniqueId().toString() + "', 0, '', 0, '" + sdf.format(time) + "')");
     }
 
     public static boolean isUserExists(UUID uuid) {

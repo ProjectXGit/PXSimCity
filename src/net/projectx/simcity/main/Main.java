@@ -6,9 +6,12 @@ import net.projectx.simcity.functions.SafeChest;
 import net.projectx.simcity.functions.Scheduler;
 import net.projectx.simcity.functions.Tablist;
 import net.projectx.simcity.functions.mysql.MySQL;
+import net.projectx.simcity.functions.mysql.MySQL_SafeChest;
+import net.projectx.simcity.functions.mysql.MySQL_User;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
 
 
 /**
@@ -29,6 +32,7 @@ public class Main extends JavaPlugin implements Plugin {
         MySQL.connect();
         Data.tablist = new Tablist();
         Scheduler.startScheduler();
+        createTables();
     }
 
     @Override
@@ -43,6 +47,11 @@ public class Main extends JavaPlugin implements Plugin {
     public void registerListener() {
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new SafeChest(), this);
+    }
+
+    public void createTables() {
+        MySQL_User.createUserTable();
+        MySQL_SafeChest.createUserTable();
     }
 
 }

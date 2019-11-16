@@ -2,3 +2,4 @@ name: PXSimCity
 version: Alpha
 main: net.projectx.simcity.main.Main
 authors: [Iclipse, DevMangomann]
+api-version: 1.14
