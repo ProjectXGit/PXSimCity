@@ -27,12 +27,15 @@ public class SafeChest implements Listener {
 
                     UUID uuid = ce.getPlayer().getUniqueId();
                     Location loc = ce.getClickedBlock().getLocation();
-                    if (MySQL_SafeChest.isChestOf(uuid, loc)) {
-                        p.sendMessage("Die Kiste gehört dem Spieler");
-                        return;
-                    } else {
-                        p.sendMessage("Du darfst diese Kiste nicht öffen");
-                        ce.setCancelled(true);
+                    if(MySQL_SafeChest.isChestOf(loc)) {
+                        p.sendMessage("Es ist eine SafeChest");
+                        if (MySQL_SafeChest.isChestOf(uuid, loc)) {
+                            p.sendMessage("Die Kiste gehört dem Spieler");
+                            return;
+                        } else {
+                            p.sendMessage("Du darfst diese Kiste nicht öffen");
+                            ce.setCancelled(true);
+                        }
                     }
                 }
             }
