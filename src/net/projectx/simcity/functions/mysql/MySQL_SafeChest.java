@@ -49,7 +49,7 @@ public class MySQL_SafeChest {
         return false;
     }
     public static void safeChest(UUID uuid, Location loc){
-        MySQL.update("INSERT INTO chest VALUES (" + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + ",'" + uuid + "')");
+        MySQL.update("INSERT INTO chest VALUES ('" + uuid + "'," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + ")");
         System.out.println("INSERT INTO chest VALUES (" + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + ",'" + uuid + "')");
     }
     public static void deleteChest(UUID uuid, Location loc){
