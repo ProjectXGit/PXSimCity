@@ -17,7 +17,7 @@ public class SafeChest implements Listener {
     @EventHandler
     public void openChest(PlayerInteractEvent ce) {
         Player p = ce.getPlayer();
-        p.sendMessage("Event wurde ausgelöst");
+        p.sendMessage("Interact Event");
         if (ce.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             p.sendMessage("Es wurde Rechtsklick gemacht");
             if (!ce.getPlayer().isSneaking()) {
@@ -41,15 +41,21 @@ public class SafeChest implements Listener {
 
     @EventHandler
     public void activateChest(BlockPlaceEvent event) {
+        Player p = event.getPlayer();
+        p.sendMessage("BlockplaceEvent");
         UUID uuid = event.getPlayer().getUniqueId();
         Location loc = event.getBlockAgainst().getLocation();
         if (event.getBlock().getType().equals(Material.OAK_WALL_SIGN)) {
-
+            p.sendMessage("Es wurde ein Schild plaziert");
 
             if (event.getBlockAgainst().getType().equals(Material.CHEST)) {
+                p.sendMessage("Das Schild wurde an eine Kiste plaziert");
                 if (!MySQL_SafeChest.isChestOf(loc)) {
-
+                    p.sendMessage("Die Kiste gehört noch keinem Spieler");
                     MySQL_SafeChest.safeChest(uuid, loc);
+                }else{
+                    event.setCancelled(true);
+                    p.sendMessage("Die Kiste gehört schon jemandem");
                 }
             }
         }
@@ -57,25 +63,34 @@ public class SafeChest implements Listener {
 
     @EventHandler
     public void deactivateChest(BlockBreakEvent sign) {
+        Player p = sign.getPlayer();
+        p.sendMessage("BlockBreakEvent");
 
         if (sign.getBlock().getType().equals(Material.OAK_WALL_SIGN)) {
+            p.sendMessage("Ein schild wurde zerstört");
             UUID uuid = sign.getPlayer().getUniqueId();
             Location loc = sign.getBlock().getLocation();
             if (MySQL_SafeChest.isSignNearChest(loc)) {
+                p.sendMessage("Das Schild war an einer Kiste");
                 Location chest = MySQL_SafeChest.isSignNearChestGetLocation(loc);
                 if (MySQL_SafeChest.isChestOf(uuid, chest)) {
+                    p.sendMessage("Die Kiste gehört diesem Spieler und wird gelöscht");
                     MySQL_SafeChest.deleteChest(uuid, chest);
                 } else {
+                    p.sendMessage("Mache nicht andere Schilde kaputt");
                     sign.setCancelled(true);
                 }
             }
         } else {
             if (sign.getBlock().getType().equals(Material.CHEST)) {
+                p.sendMessage("Eine Kiste wurde zerstört");
                 UUID uuid = sign.getPlayer().getUniqueId();
                 Location chest = sign.getBlock().getLocation();
                 if (MySQL_SafeChest.isChestOf(uuid, chest)) {
+                    p.sendMessage("Die Kiste gehört diesem Spieler und wird gelöscht");
                     MySQL_SafeChest.deleteChest(uuid, chest);
                 } else {
+                    p.sendMessage("Mache nicht andere Kisten kaputt");
                     sign.setCancelled(true);
                 }
             }
