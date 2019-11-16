@@ -20,7 +20,7 @@ public class SafeChest implements Listener {
         p.sendMessage("Interact Event");
         if (ce.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             p.sendMessage("Es wurde Rechtsklick gemacht");
-            if (!ce.getPlayer().isSneaking()) {
+
                 p.sendMessage("Es wurde nicht gesneakt");
                 if (ce.getClickedBlock().getType().equals(Material.CHEST)) {
                     p.sendMessage("Es wurde eine Kiste geöffnet");
@@ -38,7 +38,7 @@ public class SafeChest implements Listener {
                         }
                     }
                 }
-            }
+
         }
     }
 
@@ -101,6 +101,7 @@ public class SafeChest implements Listener {
                 }
             }
         }
+
     }
 
 }

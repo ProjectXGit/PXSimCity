@@ -121,10 +121,7 @@ public class MySQL_SafeChest {
         }
     }
     public static boolean isAttachedChest(Block sign) {
-        if(getAttachedBlock(sign).equals(Material.CHEST)){
-            return true;
-        }else{
-            return false;
-        }
+        return getAttachedBlock(sign).getType().equals(Material.CHEST);
     }
+
 }
