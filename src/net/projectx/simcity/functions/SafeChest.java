@@ -89,12 +89,14 @@ public class SafeChest implements Listener {
                 p.sendMessage("Eine Kiste wurde zerstört");
                 UUID uuid = sign.getPlayer().getUniqueId();
                 Location chest = sign.getBlock().getLocation();
-                if (MySQL_SafeChest.isChestOf(uuid, chest)) {
-                    p.sendMessage("Die Kiste gehört diesem Spieler und wird gelöscht");
-                    MySQL_SafeChest.deleteChest(uuid, chest);
-                } else {
-                    p.sendMessage("Mache nicht andere Kisten kaputt");
-                    sign.setCancelled(true);
+                if(MySQL_SafeChest.isChestOf(chest)) {
+                    if (MySQL_SafeChest.isChestOf(uuid, chest)) {
+                        p.sendMessage("Die Kiste gehört diesem Spieler und wird gelöscht");
+                        MySQL_SafeChest.deleteChest(uuid, chest);
+                    } else {
+                        p.sendMessage("Mache nicht andere Kisten kaputt");
+                        sign.setCancelled(true);
+                    }
                 }
             }
         }
