@@ -13,8 +13,10 @@ public class MySQL_SafeChest {
                 "yk INT,zk INT)");
     }
     public static boolean isChestOf(UUID uuid, Location loc) {
-        ResultSet rs = MySQL.querry("SELECT * FROM chest WHERE xk="+loc.getBlockX()+"AND yk="+loc.getBlockY()+
-                "AND zk=" + loc.getBlockZ() + "AND uuid='" + uuid + "'");
+        ResultSet rs = MySQL.querry("SELECT * FROM chest WHERE xk=" + loc.getBlockX() + " AND yk=" + loc.getBlockY() +
+                " AND zk=" + loc.getBlockZ() + " AND uuid='" + uuid + "'");
+        System.out.println("SELECT * FROM chest WHERE xk=" + loc.getBlockX() + " AND yk=" + loc.getBlockY() +
+                " AND zk=" + loc.getBlockZ() + " AND uuid='" + uuid + "'");
 
         try {
             return rs.next();
@@ -24,8 +26,8 @@ public class MySQL_SafeChest {
         return false;
     }
     public static boolean isChestOf(Location loc) {
-        ResultSet rs = MySQL.querry("SELECT * FROM chest WHERE xk="+loc.getBlockX()+"AND yk="+loc.getBlockY()+
-                "AND zk="+loc.getBlockZ()+"");
+        ResultSet rs = MySQL.querry("SELECT * FROM chest WHERE xk=" + loc.getBlockX() + " AND yk=" + loc.getBlockY() +
+                " AND zk=" + loc.getBlockZ() + "");
 
         try {
             return rs.next();
@@ -48,8 +50,8 @@ public class MySQL_SafeChest {
         MySQL.update("INSERT INTO chest VALUES (" + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + ",'" + uuid + "')");
     }
     public static void deleteChest(UUID uuid, Location loc){
-        MySQL.update("DELETE FROM chest WHERE xk=" + loc.getBlockX() + "AND yk=" + loc.getBlockY() +
-                "AND zk=" + loc.getBlockZ() + "AND uuid='" + uuid + "'");
+        MySQL.update("DELETE FROM chest WHERE xk=" + loc.getBlockX() + " AND yk=" + loc.getBlockY() +
+                " AND zk=" + loc.getBlockZ() + " AND uuid='" + uuid + "'");
     }
     public static boolean isSignNearChest(Location loc) {
         Location loc1 = loc;

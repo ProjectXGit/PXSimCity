@@ -69,7 +69,7 @@ public class Scheduler {
         if (!MySQL_User.getJob(p.getUniqueId()).equals("")) {
             jobwert.setPrefix("§6" + MySQL_User.getJob(p.getUniqueId()));
         } else {
-            jobwert.setPrefix("§4" + MySQL_User.getJob(p.getUniqueId()));
+            jobwert.setPrefix("§4Arbeitslos");
         }
         jobwert.addEntry(ChatColor.BOLD.toString());
         sidebar.getScore(ChatColor.BOLD.toString()).setScore(2);
