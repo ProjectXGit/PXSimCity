@@ -71,11 +71,12 @@ public class SafeChest implements Listener {
 
         if (sign.getBlock().getType().equals(Material.OAK_WALL_SIGN)) {
             p.sendMessage("Ein schild wurde zerstört");
-            UUID uuid = sign.getPlayer().getUniqueId();
-            Location loc = sign.getBlock().getLocation();
-            if (MySQL_SafeChest.isSignNearChest(loc)) {
+
+            if (MySQL_SafeChest.isAttachedChest(sign.getBlock())) {
                 p.sendMessage("Das Schild war an einer Kiste");
                 Location chest = MySQL_SafeChest.getAttachedBlock(sign.getBlock()).getLocation();
+                UUID uuid = sign.getPlayer().getUniqueId();
+
                 if (MySQL_SafeChest.isChestOf(uuid, chest)) {
                     p.sendMessage("Die Kiste gehört diesem Spieler und wird gelöscht");
                     MySQL_SafeChest.deleteChest(uuid, chest);

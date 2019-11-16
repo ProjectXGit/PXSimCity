@@ -112,12 +112,19 @@ public class MySQL_SafeChest {
 
         }
     }
-    public static Block getAttachedBlock(Block sb) {
-        if (sb.getType() == Material.OAK_WALL_SIGN) {
-            Sign s = (Sign) sb.getState().getData();
-            return sb.getRelative(s.getAttachedFace());
+    public static Block getAttachedBlock(Block sign) {
+        if (sign.getType().equals(Material.OAK_WALL_SIGN)) {
+            Sign s = (Sign) sign.getState().getData();
+            return sign.getRelative(s.getAttachedFace());
         } else {
             return null;
+        }
+    }
+    public static boolean isAttachedChest(Block sign) {
+        if(getAttachedBlock(sign).equals(Material.CHEST)){
+            return true;
+        }else{
+            return false;
         }
     }
 }
