@@ -3,6 +3,9 @@ package net.projectx.simcity.functions.mysql;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+
+import org.bukkit.material.Attachable;
 import org.bukkit.material.Sign;
 
 import java.sql.ResultSet;
@@ -113,12 +116,27 @@ public class MySQL_SafeChest {
         }
     }
     public static Block getAttachedBlock(Block sign) {
-        if (sign.getType().equals(Material.OAK_WALL_SIGN)) {
-            Sign s = (Sign) sign.getState().getData();
-            return sign.getRelative(s.getAttachedFace());
-        } else {
-            return null;
-        }
+
+
+        org.bukkit.material.Sign s = (org.bukkit.material.Sign) sign.getState().getData();
+
+            Block attachedBlock = sign.getRelative(s.getAttachedFace());
+            return attachedBlock;
+    }
+
+    public static Block getBlockSignAttachedTo(Block block) {
+        if (block.getType().equals(Material.OAK_WALL_SIGN))
+            switch (block.getData())  {
+                case 2:
+                    return block.getRelative(BlockFace.WEST);
+                case 3:
+                    return block.getRelative(BlockFace.EAST);
+                case 4:
+                    return block.getRelative(BlockFace.SOUTH);
+                case 5:
+                    return block.getRelative(BlockFace.NORTH);
+            }
+        return null;
     }
     public static boolean isAttachedChest(Block sign) {
         return getAttachedBlock(sign).getType().equals(Material.CHEST);
