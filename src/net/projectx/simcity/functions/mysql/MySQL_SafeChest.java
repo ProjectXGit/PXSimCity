@@ -3,10 +3,9 @@ package net.projectx.simcity.functions.mysql;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-
-import org.bukkit.material.Attachable;
-import org.bukkit.material.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
+import org.bukkit.craftbukkit.v1_14_R1.block.CraftSign;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,8 +20,6 @@ public class MySQL_SafeChest {
     public static boolean isChestOf(UUID uuid, Location loc) {
         ResultSet rs = MySQL.querry("SELECT * FROM chest WHERE xk=" + loc.getBlockX() + " AND yk=" + loc.getBlockY() +
                 " AND zk=" + loc.getBlockZ() + " AND uuid='" + uuid + "'");
-        System.out.println("SELECT * FROM chest WHERE xk=" + loc.getBlockX() + " AND yk=" + loc.getBlockY() +
-                " AND zk=" + loc.getBlockZ() + " AND uuid='" + uuid + "'");
 
         try {
             return rs.next();
@@ -31,11 +28,10 @@ public class MySQL_SafeChest {
         }
         return false;
     }
-    public static boolean isChestOf(Location loc) {
+
+    public static boolean isSafeChest(Location loc) {
         ResultSet rs = MySQL.querry("SELECT * FROM chest WHERE xk=" + loc.getBlockX() + " AND yk=" + loc.getBlockY() +
                 " AND zk=" + loc.getBlockZ() + "");
-        System.out.println("SELECT * FROM chest WHERE xk=" + loc.getBlockX() + " AND yk=" + loc.getBlockY() +
-                " AND zk=" + loc.getBlockZ() + "");
 
         try {
             return rs.next();
@@ -44,102 +40,68 @@ public class MySQL_SafeChest {
         }
         return false;
     }
-    public static boolean isChestOf(UUID uuid) {
-        ResultSet rs = MySQL.querry("SELECT * FROM chest WHERE uuid='" + uuid + "'");
-        System.out.println("SELECT * FROM chest WHERE uuid='" + uuid + "'");
-        try {
-            return rs.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+
+
     public static void safeChest(UUID uuid, Location loc){
         MySQL.update("INSERT INTO chest VALUES ('" + uuid + "'," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + ")");
-        System.out.println("INSERT INTO chest VALUES (" + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + ",'" + uuid + "')");
     }
-    public static void deleteChest(UUID uuid, Location loc){
+
+    public static void deleteChest(Location loc) {
         MySQL.update("DELETE FROM chest WHERE xk=" + loc.getBlockX() + " AND yk=" + loc.getBlockY() +
-                " AND zk=" + loc.getBlockZ() + " AND uuid='" + uuid + "'");
-        System.out.println("DELETE FROM chest WHERE xk=" + loc.getBlockX() + " AND yk=" + loc.getBlockY() +
-                " AND zk=" + loc.getBlockZ() + " AND uuid='" + uuid + "'");
-    }
-    public static boolean isSignNearChest(Location loc) {
-        Location loc1 = loc;
-        loc1.setX(loc1.getX()+1);
-        Location loc2 = loc;
-        loc2.setX(loc2.getX()-1);
-        Location loc3 = loc;
-        loc3.setZ(loc3.getZ()+1);
-        Location loc4 = loc;
-        loc4.setZ(loc4.getZ()-1);
-        if(isChestOf(loc1)||isChestOf(loc2)||isChestOf(loc3)||isChestOf(loc4)){
-            System.out.println("Schild ist neben kiste");
-            return true;
-
-        }else{
-            System.out.println("Schild ist nicht neben kiste");
-            return false;
-        }
-    }
-    public static Location isSignNearChestGetLocation(Location loc) {
-        Location loc1 = loc;
-        loc1.setX(loc1.getBlockX()+1);
-        Location loc2 = loc;
-        loc1.setX(loc1.getBlockX()-1);
-        Location loc3 = loc;
-        loc1.setZ(loc1.getBlockZ()+1);
-        Location loc4 = loc;
-        loc1.setZ(loc1.getBlockZ()-1);
-        if(isChestOf(loc1)){
-            System.out.println("Schild ist neben kiste1");
-            return loc1;
-        }else{
-            if(isChestOf(loc2)){
-                System.out.println("Schild ist neben kiste2");
-                return loc2;
-            }else{
-                if(isChestOf(loc3)){
-                    System.out.println("Schild ist neben kiste3");
-                    return loc3;
-                }else{
-                    if(isChestOf(loc4)){
-                        System.out.println("Schild ist neben kiste4");
-                        return loc4;
-                    }else{
-                        System.out.println("Schild ist nicht neben kiste");
-                        return loc;
-                    }
-                }
-            }
-
-        }
-    }
-    public static Block getAttachedBlock(Block sign) {
-
-
-        org.bukkit.material.Sign s = (org.bukkit.material.Sign) sign.getState().getData();
-
-            Block attachedBlock = sign.getRelative(s.getAttachedFace());
-            return attachedBlock;
+                " AND zk=" + loc.getBlockZ());
     }
 
     public static Block getBlockSignAttachedTo(Block block) {
-        if (block.getType().equals(Material.OAK_WALL_SIGN))
-            switch (block.getData())  {
-                case 2:
-                    return block.getRelative(BlockFace.WEST);
-                case 3:
-                    return block.getRelative(BlockFace.EAST);
-                case 4:
-                    return block.getRelative(BlockFace.SOUTH);
-                case 5:
-                    return block.getRelative(BlockFace.NORTH);
+        if (block != null && block.getState() instanceof CraftSign) {
+            BlockData data = block.getBlockData();
+            if (data instanceof Directional) {
+                Directional directional = (Directional) data;
+                return block.getRelative(directional.getFacing().getOppositeFace());
             }
+        }
         return null;
     }
-    public static boolean isAttachedChest(Block sign) {
-        return getAttachedBlock(sign).getType().equals(Material.CHEST);
+
+    public static boolean isChestAttached(Block sign) {
+        return getBlockSignAttachedTo(sign).getType().equals(Material.CHEST);
+    }
+
+    public static UUID getOwner(Location loc) {
+        try {
+            ResultSet rs = MySQL.querry("SELECT uuid FROM chest WHERE xk = " + loc.getBlockX() + " AND yk = " + loc.getBlockY() + " AND zk = " + loc.getBlockZ());
+            while (rs.next()) {
+                String uuid = rs.getString("uuid");
+                return UUID.fromString(uuid);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static boolean isNearSafeChest(Location loc) {
+        for (int x = -1; x < 2; x++) {
+            for (int z = -1; z < 2; z++) {
+                Location loc1 = new Location(loc.getWorld(), loc.getBlockX() + x, loc.getBlockY(), loc.getBlockZ() + z);
+                System.out.println("X:" + loc1.getBlockX() + " Y:" + loc1.getBlockY() + " Z:" + loc1.getBlockZ());
+                System.out.println(isSafeChest(loc1));
+                if (isSafeChest(loc1)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static Location getSafeChestNear(Location loc) {
+        for (int x = -1; x < 2; x++) {
+            for (int z = -1; z < 2; z++) {
+                if (isSafeChest(new Location(loc.getWorld(), loc.getBlockX() + x, loc.getBlockY(), loc.getBlockZ() + z))) {
+                    return new Location(loc.getWorld(), loc.getBlockX() + x, loc.getBlockY(), loc.getBlockZ() + z);
+                }
+            }
+        }
+        return null;
     }
 
 }

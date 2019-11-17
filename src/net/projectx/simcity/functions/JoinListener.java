@@ -24,6 +24,7 @@ public class JoinListener implements Listener {
         p.sendMessage("§aWillkommen auf dem Server!");
         tablist.setTablist(p.getUniqueId());
         Scheduler.createScoreboard(p);
+        tablist.createTablist(Scheduler.boards.get(p));
         Data.tablist.setPlayer(p, Scheduler.boards.get(p));
     }
 

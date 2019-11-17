@@ -23,7 +23,6 @@ public class Tablist {
     static String port;
     static String ranks;
 
-    public final Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
     private Team buergermeister;
     private Team foerster;
     private Team miner;
@@ -36,11 +35,14 @@ public class Tablist {
 
     private HashMap<Player, String> rankColor = new HashMap<>();
 
-
     public Tablist() {
         header = "§8« " + Data.prefix.replaceAll(Data.symbol, "") + "§8 »";
         footer = "§eSimCity 1.0";
         port = "\n§7Port: §e" + Bukkit.getPort();
+    }
+
+
+    public void createTablist(Scoreboard sb) {
 
         this.buergermeister = sb.getTeam("1a") == null ? sb.registerNewTeam("1a") : sb.getTeam("1a");
         this.foerster = sb.getTeam("2b") == null ? sb.registerNewTeam("2b") : sb.getTeam("2b");
