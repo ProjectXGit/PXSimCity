@@ -43,7 +43,7 @@ public class Foerster implements Listener {
                             System.out.println("Durability null hahahahaha");
                             return;
                         }
-                        treeup.setType(Material.CAVE_AIR);
+                        treeup.setType(Material.AIR);
                         Bukkit.getWorld("world").dropItem(treeup.getLocation(), wooddrop);
                         anzahlholz++;
                         treeup.getLocation().setY(treeup.getLocation().getY()+1);
