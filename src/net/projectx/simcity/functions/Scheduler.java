@@ -2,14 +2,10 @@ package net.projectx.simcity.functions;
 
 import net.projectx.simcity.functions.mysql.MySQL_User;
 import net.projectx.simcity.main.Data;
+import net.projectx.simcity.util.ScoreboardSign;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
 import java.util.HashMap;
 
@@ -25,12 +21,12 @@ public class Scheduler {
             @Override
             public void run() {
                 for (Player p : boards.keySet()) {
-                    Scoreboard scoreboard = boards.get(p);
-                    scoreboard.getTeam("dukatenanz").setPrefix("§6" + MySQL_User.getDukaten(p.getUniqueId()));
+                    ScoreboardSign ss = boards.get(p);
+                    ss.setLine(1, "§6" + MySQL_User.getDukaten(p.getUniqueId()));
                     if (MySQL_User.getJob(p.getUniqueId()).length() > 1) {
-                        scoreboard.getTeam("jobwert").setPrefix("§6" + MySQL_User.getJob(p.getUniqueId()));
+                        ss.setLine(4, "§6" + MySQL_User.getJob(p.getUniqueId()));
                     } else {
-                        scoreboard.getTeam("jobwert").setPrefix("§4Arbeitslos");
+                        ss.setLine(4, "§4Arbeitslos");
                     }
                 }
             }
@@ -41,47 +37,24 @@ public class Scheduler {
         scheduler.cancel();
     }
 
-    public static HashMap<Player, Scoreboard> boards = new HashMap<>();
-
+    public static HashMap<Player, ScoreboardSign> boards = new HashMap<>();
 
     public static void createScoreboard(Player p) {
-        Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        Objective sidebar = scoreboard.registerNewObjective("sidebar", "sidebar");
-        sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
-        sidebar.setDisplayName("§a" + p.getName());
-        Team dukaten = scoreboard.registerNewTeam("dukaten");
-        dukaten.setPrefix("§7Dukaten");
-        dukaten.addEntry(ChatColor.AQUA.toString());
-        sidebar.getScore(ChatColor.AQUA.toString()).setScore(6);
-
-
-        Team dukatenanz = scoreboard.registerNewTeam("dukatenanz");
-        dukatenanz.setPrefix("§6" + MySQL_User.getDukaten(p.getUniqueId()));
-        dukatenanz.addEntry(ChatColor.BLUE.toString());
-        sidebar.getScore(ChatColor.BLUE.toString()).setScore(5);
-
-        Team empty = scoreboard.registerNewTeam("empty");
-        empty.addEntry(ChatColor.DARK_AQUA.toString());
-        sidebar.getScore(ChatColor.DARK_AQUA.toString()).setScore(4);
-
-        Team job = scoreboard.registerNewTeam("job");
-        job.setPrefix("§7Job:");
-        job.addEntry(ChatColor.BLACK.toString());
-        sidebar.getScore(ChatColor.BLACK.toString()).setScore(3);
-
-        Team jobwert = scoreboard.registerNewTeam("jobwert");
-        System.out.println("|" + MySQL_User.getJob(p.getUniqueId()) + "|");
+        ScoreboardSign ss = new ScoreboardSign(p, "§a" + p.getName());
+        ss.create();
+        ss.setLine(0, "§7Dukaten: ");
+        ss.setLine(1, "§6" + MySQL_User.getDukaten(p.getUniqueId()));
+        ss.setLine(2, "");
+        ss.setLine(3, "§7Job: ");
         if (MySQL_User.getJob(p.getUniqueId()).length() > 1) {
-            jobwert.setPrefix("§6" + MySQL_User.getJob(p.getUniqueId()));
+            ss.setLine(4, "§6" + MySQL_User.getJob(p.getUniqueId()));
         } else {
-            jobwert.setPrefix("§4Arbeitslos");
+            ss.setLine(4, "§4Arbeitslos");
         }
-        jobwert.addEntry(ChatColor.BOLD.toString());
-        sidebar.getScore(ChatColor.BOLD.toString()).setScore(2);
-
-        boards.put(p, scoreboard);
-        p.setScoreboard(scoreboard);
-
-
+        ss.setLine(5, "");
+        ss.setLine(6, "  §e§lSimCity1.0");
+        boards.put(p, ss);
     }
+
+
 }

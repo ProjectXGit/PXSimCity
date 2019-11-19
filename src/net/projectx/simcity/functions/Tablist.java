@@ -5,13 +5,13 @@ import net.projectx.simcity.main.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 import static net.projectx.simcity.main.Data.instance;
+import static net.projectx.simcity.main.Data.sb;
 
 /**
  * Created by Yannick who could get really angry if somebody steal his code!
@@ -42,8 +42,7 @@ public class Tablist {
     }
 
 
-    public void createTablist(Scoreboard sb) {
-
+    public void createTablist() {
         this.buergermeister = sb.getTeam("1a") == null ? sb.registerNewTeam("1a") : sb.getTeam("1a");
         this.foerster = sb.getTeam("2b") == null ? sb.registerNewTeam("2b") : sb.getTeam("2b");
         this.miner = sb.getTeam("3c") == null ? sb.registerNewTeam("3c") : sb.getTeam("3c");
@@ -61,7 +60,7 @@ public class Tablist {
         this.schmied.setPrefix("§8[§bSchmied§8]§7 ");
         this.farmer.setPrefix("§8[§5Farmer§8]§7 ");
         this.zuechter.setPrefix("§8[§dTierzüchter§8]§7 ");
-        this.arbeitslos.setPrefix("§8[§0Arbeitslos§1]§7 ");
+        this.arbeitslos.setPrefix("§8[§4Arbeitslos§8]§7 ");
     }
 
 
@@ -76,7 +75,7 @@ public class Tablist {
     }
 
 
-    public void setPlayer(Player p, Scoreboard sb) {
+    public void setPlayer(Player p) {
         String team = "";
         team = "";
         if (MySQL_User.getJob(p.getUniqueId()).equalsIgnoreCase("Buergermeister")) {
