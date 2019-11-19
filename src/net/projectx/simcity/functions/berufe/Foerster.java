@@ -27,8 +27,10 @@ public class Foerster implements Listener {
                     event.setDropItems(false);
                 }
             }else {
+                System.out.println("Förster baut Holz ab");
                 ItemStack werkzeug = event.getPlayer().getItemOnCursor();
                 if (werkzeug.getType().toString().endsWith("_AXE")) {
+                    System.out.println("Förster baut Holz mit Axt ab");
                     Location loc = wood.getLocation();
                     loc.setY(loc.getY() + 1);
                     Block treeup = loc.getBlock();
@@ -36,7 +38,9 @@ public class Foerster implements Listener {
                     ItemStack wooddrop = new ItemStack(wood.getType(), 1);
 
                     while (treeup.getType().equals(wood.getType())) {
+                        System.out.println("Über dem Holz ist noch eins");
                         if(werkzeug.getDurability()==0){
+                            System.out.println("Durability null hahahahaha");
                             return;
                         }
                         treeup.setType(Material.CAVE_AIR);
