@@ -29,6 +29,7 @@ public class Foerster implements Listener {
             }else {
                 System.out.println("Förster baut Holz ab");
                 ItemStack werkzeug = event.getPlayer().getItemOnCursor();
+                System.out.println(""+werkzeug);
                 if (werkzeug.getType().toString().endsWith("_AXE")) {
                     System.out.println("Förster baut Holz mit Axt ab");
                     Location loc = wood.getLocation();
