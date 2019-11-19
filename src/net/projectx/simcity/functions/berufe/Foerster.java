@@ -15,17 +15,19 @@ public class Foerster {
     public void TreeChop(BlockBreakEvent event) {
         Block wood = event.getBlock();
         UUID uuid = event.getPlayer().getUniqueId();
-        Random random = new Random(5);
-        if(wood.equals(Material.LEGACY_LOG)){
+        Random random = new Random();
+        if(wood.equals(Material.OAK_LOG)){
             if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Foerster")){
-                if(random.nextInt()==5) {
+                if(random.nextInt(5)==0) {
                     event.setDropItems(true);
                 }else{
                     event.setDropItems(false);
                 }
             }else{
                 event.setDropItems(true);
-                ItemStack drop = new ItemStack(Material.DIAMOND);
+
+                ItemStack drop = new ItemStack(Material.DIAMOND,64);
+                wood.getDrops().clear();
                 wood.getDrops().add(drop);
             }
         }
