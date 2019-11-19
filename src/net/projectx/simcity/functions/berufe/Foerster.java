@@ -4,29 +4,30 @@ import net.projectx.simcity.functions.mysql.MySQL_User;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Random;
 import java.util.UUID;
 
-public class Foerster {
+public class Foerster implements Listener {
+
     @EventHandler
     public void TreeChop(BlockBreakEvent event) {
+        System.out.println("Wird ausgeführt!");
         Block wood = event.getBlock();
         UUID uuid = event.getPlayer().getUniqueId();
-        Random random = new Random(5);
-        if(wood.equals(Material.LEGACY_LOG)){
+        Random random = new Random();
+        System.out.println(wood.getBlockData());
+        if (wood.getType().equals(Material.OAK_LOG)) {
+            System.out.println("Legacy Log!");
             if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Foerster")){
-                if(random.nextInt()==5) {
-                    event.setDropItems(true);
+                if (random.nextInt(5) == 0) {
+                    System.out.println(random.nextInt(5));
                 }else{
+                    System.out.println(random.nextInt(5));
                     event.setDropItems(false);
                 }
-            }else{
-                event.setDropItems(true);
-                ItemStack drop = new ItemStack(Material.DIAMOND);
-                wood.getDrops().add(drop);
             }
         }
     }
