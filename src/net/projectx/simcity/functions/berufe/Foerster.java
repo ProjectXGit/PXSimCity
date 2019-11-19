@@ -16,13 +16,10 @@ public class Foerster implements Listener {
         Block wood = event.getBlock();
         UUID uuid = event.getPlayer().getUniqueId();
         Random random = new Random();
-        System.out.println(wood.getType().toString());
         if (wood.getType().toString().endsWith("_LOG")) {
             if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Foerster")){
                 if (random.nextInt(5) == 0) {
-                    System.out.println(random.nextInt(5));
                 }else{
-                    System.out.println(random.nextInt(5));
                     event.setDropItems(false);
                 }
             }
