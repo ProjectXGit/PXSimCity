@@ -27,4 +27,5 @@ public class ChatEvent implements Listener {
         });
         e.setCancelled(true);
     }
+
 }

@@ -1,11 +1,12 @@
 package net.projectx.simcity.functions.berufe;
 
 import net.projectx.simcity.functions.mysql.MySQL_User;
-import org.bukkit.Material;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Animals;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Mob;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
@@ -18,20 +19,28 @@ public class Zuechter implements Listener {
     public void Tierkiller(EntityDeathEvent event) {
         Random random = new Random();
         Entity dead = event.getEntity();
-
+        System.out.println("Tier gestorben!");
         if (event.getEntity().getKiller() instanceof Player) {
+            System.out.println("Tier von Spieler getötet!");
             Player p = event.getEntity().getKiller();
             UUID uuid = p.getUniqueId();
 
             if (!(dead instanceof Mob)) {
+                System.out.println("War kein Mob!");
                 if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")) {
-                    if (random.nextInt(5) == 0) {
+                    System.out.println("War kein Züchter");
+                    int rand = random.nextInt(5);
+                    System.out.println("Zufallszahl: " + rand);
+                    if (rand == 0) {
                         return;
                     } else {
+                        System.out.println("Drop soll gecleared werden!");
                         event.getDrops().clear();
                         return;
                     }
                 }
+            } else {
+                System.out.println("War ein Mob!");
             }
         }
     }

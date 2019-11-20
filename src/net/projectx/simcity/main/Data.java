@@ -3,6 +3,7 @@ package net.projectx.simcity.main;
 
 import net.projectx.simcity.functions.Tablist;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Scoreboard;
@@ -22,4 +23,5 @@ public class Data {
     public static Tablist tablist;
     public static Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
     public static HashMap<Player, Long> playtime = new HashMap<>();
+    public static HashMap<Location, Integer> fireworks = new HashMap<>();
 }

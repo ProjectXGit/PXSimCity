@@ -43,7 +43,7 @@ public class cmd_plot {
 
     @PXCommand(
             name = "delete",
-            usage = "/plot delete <name>",
+            usage = "/plot delete <plot>",
             minArgs = 1,
             maxArgs = 1
     )
@@ -65,7 +65,7 @@ public class cmd_plot {
             name = "buy",
             minArgs = 1,
             maxArgs = 1,
-            usage = "/plot buy <name>"
+            usage = "/plot buy <plot>"
     )
     public void buy(CommandSender sender, String name) {
 
@@ -75,7 +75,7 @@ public class cmd_plot {
             name = "confirm",
             minArgs = 1,
             maxArgs = 1,
-            usage = "/plot buy confirm <name>"
+            usage = "/plot buy confirm <plot>"
     )
     public void confirmBuy(CommandSender sender, String name) {
 
@@ -85,7 +85,7 @@ public class cmd_plot {
             name = "sell",
             minArgs = 2,
             maxArgs = 2,
-            usage = "/plot sell <name> <preis>"
+            usage = "/plot sell <plot> <preis>"
     )
     public void sell(CommandSender sender, String name, long price) {
 
@@ -95,9 +95,39 @@ public class cmd_plot {
             name = "sell",
             minArgs = 2,
             maxArgs = 2,
-            usage = "/plot sell confirm <name> <preis>"
+            usage = "/plot sell confirm <plot> <preis>"
     )
     public void confirmSell(CommandSender sender, String name, long price) {
+
+    }
+
+    @PXCommand(
+            name = "members",
+            minArgs = 1,
+            maxArgs = 1,
+            usage = "/plot members <plot>"
+    )
+    public void members(CommandSender sender) {
+
+    }
+
+    @PXCommand(
+            name = "memberadd",
+            minArgs = 2,
+            maxArgs = 2,
+            usage = "/plot memberadd <plot> <member>"
+    )
+    public void memberadd(CommandSender sender, String plot, String member) {
+
+    }
+
+    @PXCommand(
+            name = "memberremove",
+            minArgs = 2,
+            maxArgs = 2,
+            usage = "/plot memberadd <plot> <member>"
+    )
+    public void memberremove(CommandSender sender, String plot, String member) {
 
     }
 
