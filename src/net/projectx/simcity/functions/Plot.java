@@ -8,6 +8,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedPolygonalRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import net.projectx.simcity.functions.mysql.MySQL_Plot;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -27,9 +28,17 @@ public class Plot {
         list.add(BlockVector2.at(loc2.getBlockX(), loc2.getBlockZ()));
         ProtectedRegion region = new ProtectedPolygonalRegion(name, list, 0, 255);
         regions.addRegion(region);
+        MySQL_Plot.createPlot(name, city);
     }
 
-    public static void deletePlot() {
-
+    public static void deletePlot(String name) {
+        regions.removeRegion(name);
+        MySQL_Plot.deletePlot(name);
     }
+
+    public static boolean isPlotExists(String name) {
+        return MySQL_Plot.getPlots().contains(name);
+    }
+
+
 }

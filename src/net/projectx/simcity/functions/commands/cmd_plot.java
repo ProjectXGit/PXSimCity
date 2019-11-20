@@ -1,9 +1,11 @@
 package net.projectx.simcity.functions.commands;
 
+import net.projectx.simcity.functions.Plot;
 import net.projectx.simcity.main.Data;
 import net.projectx.simcity.util.command.PXCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import static net.projectx.simcity.main.Data.prefix;
 
@@ -37,8 +39,12 @@ public class cmd_plot {
             minArgs = 2,
             maxArgs = 2
     )
-    public void create(CommandSender sender, String name, boolean city) {
-
+    public void create(Player p, String name, boolean city) {
+        if (!Plot.isPlotExists(name)) {
+            Plot.createPlot(name, ((com.sk89q.worldedit.entity.Player) p).toString(), , );
+        } else {
+            p.sendMessage(prefix + "§cDas Grundstück §e" + name + "§c existiert bereits!");
+        }
     }
 
     @PXCommand(

@@ -68,7 +68,7 @@ public class Scheduler {
                         ss.setLine(9, "§f§o" + a + ChatColor.BLUE);
                     }
                 }
-                if (ticks % 5 == 0) {
+                if (ticks % 7 == 0) {
                     firework();
                 }
             }
@@ -145,8 +145,8 @@ public class Scheduler {
 
             Fireworkgenerator fireworkgenerator = new Fireworkgenerator(Data.instance);
             fireworkgenerator.setLocation(spawn);
-            fireworkgenerator.setLifeTime(20);
-            fireworkgenerator.setPower(2);
+            fireworkgenerator.setLifeTime(30);
+            fireworkgenerator.setPower(60);
             FireworkEffect.Type type;
             switch (random.nextInt(5)) {
                 case 0:
