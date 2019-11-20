@@ -44,14 +44,15 @@ public class Foerster implements Listener {
                         Location locnew = locold;
                         locnew.setY(locold.getY()+1);
                         Block treeup = locnew.getBlock();
+                        Block treeunder = locold.getBlock();
 
                         ItemStack wooddrop = new ItemStack(wood.getType(), 1);
 
-                        while (treeup.getType().equals(locold.getBlock().getType())) {
-
+                        while (treeup.getType().equals(treeunder.getType())) {
+                            treeunder = treeup;
                             p.sendMessage("Über dem Holz ist noch eins");
 
-                            if (werkzeug.getDamage()==werkzeugitem.getType().getMaxDurability()) {
+                            if (werkzeug.getDamage()==werkzeugitem.getType().getMaxDurability()-1) {
 
                                 p.sendMessage("Durability null");
                                 return;
@@ -62,7 +63,8 @@ public class Foerster implements Listener {
                             Bukkit.getWorld("world").dropItem(treeup.getLocation(), wooddrop);
 
                             treeup.getLocation().setY(treeup.getLocation().getY() + 1);
-                            werkzeug.setDamage((short) (werkzeug.getDamage() - 1));
+
+                            werkzeug.setDamage((short) (werkzeug.getDamage() + 1));
                         }
 
                     }
