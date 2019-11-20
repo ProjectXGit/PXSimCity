@@ -18,22 +18,24 @@ public class Zuechter implements Listener {
     public void Tierkiller(EntityDeathEvent event){
         Random random = new Random();
         Entity dead = event.getEntity();
-        Player p = event.getEntity().getKiller();
-        UUID uuid = p.getUniqueId();
+        if(dead.getLastDamageCause() instanceof Player) {
+            Player p = (Player) dead.getLastDamageCause();
+            UUID uuid = p.getUniqueId();
 
-       if(!(dead instanceof Mob)){
-           if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")){
-               if(random.nextInt(5)==0){
-                   return;
-               }else{
-                   event.getDrops().clear();
-                   return;
-               }
-           }
-       }
+                if (!(dead instanceof Mob)) {
+                    if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")) {
+                        if (random.nextInt(5) == 0) {
+                            return;
+                        } else {
+                            event.getDrops().clear();
+                            return;
+                        }
+                    }
+                }
+            }
+        }
 
 
-    }
 
 @EventHandler
     public void LiebeMachen(PlayerInteractEntityEvent event){
