@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.util.Random;
@@ -47,7 +48,7 @@ public class Zuechter implements Listener {
 
 
     @EventHandler
-    public void LiebeMachen(PlayerInteractEntityEvent event) {
+    public void LiebeMachen(PlayerInteractAtEntityEvent event) {
         Player p = event.getPlayer();
         UUID uuid = p.getUniqueId();
         Entity tier = event.getRightClicked();

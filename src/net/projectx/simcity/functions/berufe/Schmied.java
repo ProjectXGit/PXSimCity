@@ -20,11 +20,17 @@ public class Schmied implements Listener {
     @EventHandler
     public void Schmieden(PrepareItemCraftEvent event) {
         if (event.getInventory().getHolder() instanceof Player) {
+
             Inventory inventory = event.getInventory();
             Player p = (Player) inventory.getHolder();
             UUID uuid = p.getUniqueId();
+            p.sendMessage("Spieler will craften.");
+            p.sendMessage(""+inventory);
+
             if (inventory.getType().equals(InventoryType.WORKBENCH)) {
+                p.sendMessage("Spieler will craften in Workbench.");
                 ItemStack item = event.getRecipe().getResult();
+                p.sendMessage("Spieler will craften:"+item);
                 if (!item.getType().toString().startsWith("WOODEN_")) {
                     if (!item.getType().toString().startsWith("LEATHER_")) {
                         if (!item.getType().toString().startsWith("TURTLE_")) {
