@@ -69,7 +69,7 @@ public class Schmied implements Listener {
         if(Amboss.getType().toString().endsWith("ANVIL")){
             if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")){
                 event.setCancelled(true);
-                p.sendMessage("§cDu musst ein Schmied sein, um Ambosse nutzen kann.");
+                p.sendMessage("§cDu musst ein Schmied sein, um Ambosse nutzen zu können.");
                 return;
             }
         }
