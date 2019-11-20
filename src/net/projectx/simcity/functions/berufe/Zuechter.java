@@ -1,15 +1,13 @@
 package net.projectx.simcity.functions.berufe;
 
 import net.projectx.simcity.functions.mysql.MySQL_User;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.util.Random;
 import java.util.UUID;
@@ -48,19 +46,21 @@ public class Zuechter implements Listener {
 
 
     @EventHandler
-    public void LiebeMachen(PlayerInteractAtEntityEvent event) {
+    public void LiebeMachen(PlayerInteractEntityEvent event) {
         Player p = event.getPlayer();
         UUID uuid = p.getUniqueId();
-        Entity tier = event.getRightClicked();
-
-        if (tier instanceof Animals) {
-
-            if (((Animals) tier).isLoveMode()) {
-                if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")) {
-                    event.setCancelled(true);
-                    return;
-                }
-            }
+        Entity entity = event.getRightClicked();
+        p.sendMessage("Spieler rechtsklickt " + entity);
+        if (entity instanceof Animals) {
+p.sendMessage("Spieler rechtsklickt animal");
+if(!((Animals) entity).isLoveMode()){
+    p.sendMessage("Spieler will tier lieben lassen.");
+    if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")){
+        event.setCancelled(true);
+        p.sendMessage("Jo du bist kein tierzüchter");
+        return;
+    }
+}
         }
     }
 }

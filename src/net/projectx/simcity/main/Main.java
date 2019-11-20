@@ -3,10 +3,7 @@ package net.projectx.simcity.main;
 
 import com.google.common.base.Joiner;
 import net.projectx.simcity.functions.*;
-import net.projectx.simcity.functions.berufe.Foerster;
-import net.projectx.simcity.functions.berufe.Miner;
-import net.projectx.simcity.functions.berufe.Schmied;
-import net.projectx.simcity.functions.berufe.Zuechter;
+import net.projectx.simcity.functions.berufe.*;
 import net.projectx.simcity.functions.commands.cmd_firework;
 import net.projectx.simcity.functions.commands.cmd_ping;
 import net.projectx.simcity.functions.commands.cmd_plot;
@@ -86,6 +83,7 @@ public class Main extends JavaPlugin implements Plugin {
         Bukkit.getPluginManager().registerEvents(new Miner(), this);
         Bukkit.getPluginManager().registerEvents(new Schmied(), this);
         Bukkit.getPluginManager().registerEvents(new Zuechter(), this);
+        Bukkit.getPluginManager().registerEvents(new Farmer(), this);
         Bukkit.getPluginManager().registerEvents(new ChatEvent(), this);
 
     }
