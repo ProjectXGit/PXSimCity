@@ -15,35 +15,35 @@ import java.util.UUID;
 public class Zuechter implements Listener {
 
     @EventHandler
-    public void Tierkiller(EntityDeathEvent event){
+    public void Tierkiller(EntityDeathEvent event) {
         Random random = new Random();
         Entity dead = event.getEntity();
-        if(dead.getLastDamageCause() instanceof Player) {
-            Player p = (Player) dead.getLastDamageCause();
+
+        if (event.getEntity().getKiller() instanceof Player) {
+            Player p = event.getEntity().getKiller();
             UUID uuid = p.getUniqueId();
 
-                if (!(dead instanceof Mob)) {
-                    if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")) {
-                        if (random.nextInt(5) == 0) {
-                            return;
-                        } else {
-                            event.getDrops().clear();
-                            return;
-                        }
+            if (!(dead instanceof Mob)) {
+                if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")) {
+                    if (random.nextInt(5) == 0) {
+                        return;
+                    } else {
+                        event.getDrops().clear();
+                        return;
                     }
                 }
             }
         }
+    }
 
 
-
-@EventHandler
-    public void LiebeMachen(PlayerInteractEntityEvent event){
+    @EventHandler
+    public void LiebeMachen(PlayerInteractEntityEvent event) {
         Player p = event.getPlayer();
         UUID uuid = p.getUniqueId();
         Entity tier = event.getRightClicked();
 
-        if(tier instanceof Animals) {
+        if (tier instanceof Animals) {
 
             if (((Animals) tier).isLoveMode()) {
                 if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")) {
