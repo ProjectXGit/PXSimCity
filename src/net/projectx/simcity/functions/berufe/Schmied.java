@@ -25,13 +25,12 @@ public class Schmied implements Listener {
             Inventory inventory = event.getInventory();
             Player p = (Player) inventory.getHolder();
             UUID uuid = p.getUniqueId();
-            p.sendMessage("Spieler will craften.");
-            p.sendMessage("" + inventory);
+
 
             if (inventory.getType().equals(InventoryType.WORKBENCH)) {
-                p.sendMessage("Spieler will craften in Workbench.");
+
                 ItemStack item = event.getRecipe().getResult();
-                p.sendMessage("Spieler will craften:" + item);
+
                 if (!item.getType().toString().startsWith("WOODEN_")) {
                     if (!item.getType().toString().startsWith("LEATHER_")) {
                         if (!item.getType().toString().startsWith("TURTLE_")) {
@@ -43,63 +42,77 @@ public class Schmied implements Listener {
                                         if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
                                             event.setCancelled(true);
                                             p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
-                                        } else {
+                                            return;
+                                        }
+                                    } else {
 
-                                            if (item.getType().toString().endsWith("_PICKAXE")) {
+                                        if (item.getType().toString().endsWith("_PICKAXE")) {
+                                            if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
+                                                event.setCancelled(true);
+                                                p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
+                                                return;
+
+                                            }
+                                        } else {
+                                            if (item.getType().toString().endsWith("_AXE")) {
                                                 if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
                                                     event.setCancelled(true);
                                                     p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
+                                                    return;
+
                                                 }
                                             } else {
-                                                if (item.getType().toString().endsWith("_AXE")) {
+                                                if (item.getType().toString().endsWith("_SHOVEL")) {
                                                     if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
                                                         event.setCancelled(true);
                                                         p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
+                                                        return;
+
                                                     }
                                                 } else {
-                                                    if (item.getType().toString().endsWith("_SHOVEL")) {
+                                                    if (item.getType().toString().endsWith("_HOE")) {
                                                         if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
                                                             event.setCancelled(true);
                                                             p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
+                                                            return;
+
                                                         }
                                                     } else {
-                                                        if (item.getType().toString().endsWith("_HOE")) {
+                                                        if (item.getType().toString().endsWith("_HELMET")) {
                                                             if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
                                                                 event.setCancelled(true);
                                                                 p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
+                                                                return;
                                                             }
                                                         } else {
-                                                            if (item.getType().toString().endsWith("_HELMET")) {
+                                                            if (item.getType().toString().endsWith("_CHESTPLATE")) {
                                                                 if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
                                                                     event.setCancelled(true);
                                                                     p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
+                                                                    return;
                                                                 }
                                                             } else {
-                                                                if (item.getType().toString().endsWith("_CHESTPLATE")) {
+                                                                if (item.getType().toString().endsWith("_LEGGINGS")) {
                                                                     if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
                                                                         event.setCancelled(true);
                                                                         p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
+                                                                        return;
                                                                     }
                                                                 } else {
-                                                                    if (item.getType().toString().endsWith("_LEGGINGS")) {
+                                                                    if (item.getType().toString().endsWith("_BOOTS")) {
                                                                         if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
                                                                             event.setCancelled(true);
                                                                             p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
+                                                                            return;
                                                                         }
                                                                     } else {
-                                                                        if (item.getType().toString().endsWith("_BOOTS")) {
+                                                                        if (item.getType().toString().endsWith("_HORSE_ARMOR")) {
                                                                             if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
                                                                                 event.setCancelled(true);
                                                                                 p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
+                                                                                return;
                                                                             }
-                                                                        } else {
-                                                                            if (item.getType().toString().endsWith("_HORSE_ARMOR")) {
-                                                                                if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
-                                                                                    event.setCancelled(true);
-                                                                                    p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
-                                                                                }
 
-                                                                            }
                                                                         }
                                                                     }
                                                                 }
@@ -114,28 +127,29 @@ public class Schmied implements Listener {
                             }
                         }
                     }
-
                 }
+
             }
         }
     }
 
-        @EventHandler
-        public void Amboss (PlayerInteractEvent event){
-            Player p = event.getPlayer();
 
-            UUID uuid = p.getUniqueId();
-            if (event.hasBlock()) {
-                if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-                    Block Amboss = event.getClickedBlock();
-                    if (Amboss.getType().toString().endsWith("ANVIL")) {
-                        if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
-                            event.setCancelled(true);
-                            p.sendMessage("§cDu musst ein Schmied sein, um Ambosse nutzen zu können.");
-                            return;
-                        }
+    @EventHandler
+    public void Amboss(PlayerInteractEvent event) {
+        Player p = event.getPlayer();
+
+        UUID uuid = p.getUniqueId();
+        if (event.hasBlock()) {
+            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                Block Amboss = event.getClickedBlock();
+                if (Amboss.getType().toString().endsWith("ANVIL")) {
+                    if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
+                        event.setCancelled(true);
+                        p.sendMessage("§cDu musst ein Schmied sein, um Ambosse nutzen zu können.");
+                        return;
                     }
                 }
             }
         }
     }
+}
