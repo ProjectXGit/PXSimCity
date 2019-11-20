@@ -3,11 +3,13 @@ package net.projectx.simcity.functions.berufe;
 import net.projectx.simcity.functions.mysql.MySQL_User;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftInventoryCrafting;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -15,7 +17,8 @@ import java.util.UUID;
 public class Schmied implements Listener {
     @EventHandler
     public void Schmieden(CraftItemEvent event) {
-        ItemStack item = event.getCursor();
+        Inventory craftingtable = event.getInventory();
+        ItemStack item = event.getRecipe().getResult();
         Player p = (Player) event.getWhoClicked();
         UUID uuid = p.getUniqueId();
 
