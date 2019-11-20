@@ -2,6 +2,8 @@ package net.projectx.simcity.main;
 
 
 import com.google.common.base.Joiner;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.projectx.simcity.functions.*;
 import net.projectx.simcity.functions.berufe.*;
 import net.projectx.simcity.functions.commands.cmd_firework;
@@ -26,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static net.projectx.simcity.main.Data.tablist;
+import static net.projectx.simcity.main.Data.*;
 
 
 /**
@@ -55,6 +57,18 @@ public class Main extends JavaPlugin implements Plugin {
             Scheduler.createScoreboard(p);
             tablist.setPlayer(p);
         });
+        for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+            if (plugin instanceof WorldEditPlugin) {
+                wedit = ((WorldEditPlugin) plugin);
+                break;
+            }
+        }
+        for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+            if (plugin instanceof WorldGuardPlugin) {
+                wguard = ((WorldGuardPlugin) plugin);
+                break;
+            }
+        }
     }
 
     @Override

@@ -1,6 +1,8 @@
 package net.projectx.simcity.main;
 
 
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.projectx.simcity.functions.Tablist;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -24,4 +26,6 @@ public class Data {
     public static Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
     public static HashMap<Player, Long> playtime = new HashMap<>();
     public static HashMap<Location, Integer> fireworks = new HashMap<>();
+    public static WorldEditPlugin wedit;
+    public static WorldGuardPlugin wguard;
 }

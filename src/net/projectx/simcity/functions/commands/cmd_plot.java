@@ -1,13 +1,18 @@
 package net.projectx.simcity.functions.commands;
 
+import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.world.World;
 import net.projectx.simcity.functions.Plot;
+import net.projectx.simcity.functions.mysql.MySQL_Plot;
 import net.projectx.simcity.main.Data;
 import net.projectx.simcity.util.command.PXCommand;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static net.projectx.simcity.main.Data.prefix;
+import static net.projectx.simcity.main.Data.wedit;
 
 /**
  * ~Yannick on 19.11.2019 at 09:09 o´ clock
@@ -17,8 +22,7 @@ public class cmd_plot {
 
     @PXCommand(
             name = "plot",
-            aliases = "p",
-            noConsole = true
+            aliases = "p"
     )
     public void execute(CommandSender sender) {
         builder.append(prefix + "§7§lHilfsübersicht:§r\n");
@@ -37,11 +41,18 @@ public class cmd_plot {
             name = "create",
             usage = "/plot create <name> <inCity>",
             minArgs = 2,
-            maxArgs = 2
+            maxArgs = 2,
+            noConsole = true
     )
     public void create(Player p, String name, boolean city) {
         if (!Plot.isPlotExists(name)) {
-            Plot.createPlot(name, ((com.sk89q.worldedit.entity.Player) p).toString(), , );
+            try {
+                Location loc1 = new Location(p.getWorld(), wedit.getSession(p).getSelection((World) p.getWorld()).getMaximumPoint().getBlockX(), wedit.getSession(p).getSelection((World) p.getWorld()).getMaximumPoint().getBlockY(), wedit.getSession(p).getSelection((World) p.getWorld()).getMaximumPoint().getBlockZ());
+                Location loc2 = new Location(p.getWorld(), wedit.getSession(p).getSelection((World) p.getWorld()).getMinimumPoint().getBlockX(), wedit.getSession(p).getSelection((World) p.getWorld()).getMinimumPoint().getBlockY(), wedit.getSession(p).getSelection((World) p.getWorld()).getMinimumPoint().getBlockZ());
+                Plot.createPlot(name, loc1, loc2, city);
+            } catch (IncompleteRegionException e) {
+                p.sendMessage(prefix + "Du musst zuerst die Ecken markieren!");
+            }
         } else {
             p.sendMessage(prefix + "§cDas Grundstück §e" + name + "§c existiert bereits!");
         }
@@ -54,7 +65,11 @@ public class cmd_plot {
             maxArgs = 1
     )
     public void delete(CommandSender sender, String name) {
-
+        if (!Plot.isPlotExists(name)) {
+            Plot.deletePlot(name);
+        } else {
+            sender.sendMessage(prefix + "§cDas Grundstück §e" + name + "§c existiert nicht!");
+        }
     }
 
     @PXCommand(
@@ -64,7 +79,11 @@ public class cmd_plot {
             usage = "plot list"
     )
     public void list(CommandSender sender) {
-
+        final String[] plots = {""};
+        MySQL_Plot.getPlots().forEach(entry -> {
+            plots[0] = plots[0] + entry;
+        });
+        sender.sendMessage(prefix + "");
     }
 
     @PXCommand(
