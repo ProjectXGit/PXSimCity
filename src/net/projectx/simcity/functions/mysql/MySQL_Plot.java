@@ -22,6 +22,11 @@ public class MySQL_Plot {
         MySQL.update("INSERT INTO plot VALUES ('" + name + "', 'null', " + city + ")");
     }
 
+    public static void deletePlot(String name) {
+        MySQL.update("DELETE * FROM plot WHERE name = '" + name + "'");
+    }
+
+
     public static ArrayList<String> getPlots() {
         ArrayList<String> list = new ArrayList<>();
         try {

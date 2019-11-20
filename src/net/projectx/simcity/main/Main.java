@@ -12,6 +12,7 @@ import net.projectx.simcity.functions.commands.cmd_ping;
 import net.projectx.simcity.functions.commands.cmd_plot;
 import net.projectx.simcity.functions.commands.cmd_reload;
 import net.projectx.simcity.functions.mysql.MySQL;
+import net.projectx.simcity.functions.mysql.MySQL_Plot;
 import net.projectx.simcity.functions.mysql.MySQL_SafeChest;
 import net.projectx.simcity.functions.mysql.MySQL_User;
 import net.projectx.simcity.util.command.BukkitCommand;
@@ -66,6 +67,7 @@ public class Main extends JavaPlugin implements Plugin {
             MySQL_User.setPlaytime(Data.playtime.get(entry), entry.getUniqueId());
             entry.sendMessage("Scoreboard gelöscht, Playtime gesaved!");
         });
+        Scheduler.stopScheduler();
     }
 
 
@@ -91,6 +93,8 @@ public class Main extends JavaPlugin implements Plugin {
     public void createTables() {
         MySQL_User.createUserTable();
         MySQL_SafeChest.createUserTable();
+        MySQL_Plot.createPlotTable();
+        MySQL_Plot.createPlotMemberTable();
     }
 
 
