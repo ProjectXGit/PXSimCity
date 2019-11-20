@@ -279,7 +279,7 @@ public class ScoreboardSign {
         public PacketPlayOutScoreboardTeam removeTeam() {
             PacketPlayOutScoreboardTeam packet = new PacketPlayOutScoreboardTeam();
             setField(packet, "a", name);
-            setField(packet, "h", 1);
+            setField(packet, "i", 1);
             first = true;
             return packet;
         }

@@ -28,4 +28,8 @@ public class Plot {
         ProtectedRegion region = new ProtectedPolygonalRegion(name, list, 0, 255);
         regions.addRegion(region);
     }
+
+    public static void deletePlot() {
+
+    }
 }

@@ -7,7 +7,9 @@ import net.projectx.simcity.functions.berufe.Foerster;
 import net.projectx.simcity.functions.berufe.Miner;
 import net.projectx.simcity.functions.berufe.Schmied;
 import net.projectx.simcity.functions.berufe.Zuechter;
+import net.projectx.simcity.functions.commands.cmd_firework;
 import net.projectx.simcity.functions.commands.cmd_plot;
+import net.projectx.simcity.functions.commands.cmd_reload;
 import net.projectx.simcity.functions.mysql.MySQL;
 import net.projectx.simcity.functions.mysql.MySQL_SafeChest;
 import net.projectx.simcity.functions.mysql.MySQL_User;
@@ -58,17 +60,19 @@ public class Main extends JavaPlugin implements Plugin {
 
     @Override
     public void onDisable() {
-        Scheduler.stopScheduler();
-        Data.playtime.forEach(((p, aLong) -> {
-            MySQL_User.setPlaytime(aLong, p.getUniqueId());
-            Data.playtime.remove(p);
-            Scheduler.boards.get(p).destroy();
-
-        }));
+        Bukkit.getOnlinePlayers().forEach(entry -> {
+            Scheduler.boards.get(entry).destroy();
+            MySQL_User.setPlaytime(Data.playtime.get(entry), entry.getUniqueId());
+            entry.sendMessage("Scoreboard gelöscht, Playtime gesaved!");
+        });
     }
+
+
 
     public void registerCommands() {
         register(new cmd_plot(), this);
+        register(new cmd_reload(), this);
+        register(new cmd_firework(), this);
     }
 
     public void registerListener() {
