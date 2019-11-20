@@ -117,7 +117,7 @@ public class MySQL_User {
     }
 
     public static void setPlaytime(long time, UUID uuid) {
-        ResultSet rs = MySQL.querry("UPDATE user SET playtime = " + time + " WHERE uuid = '" + uuid + "'");
+        MySQL.update("UPDATE user SET playtime = " + time + " WHERE uuid = '" + uuid + "'");
     }
 
     public static void addPlaytime(long time, UUID uuid) {

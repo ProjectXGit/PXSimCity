@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -117,6 +118,26 @@ public class SafeChest implements Listener {
                 e.setCancelled(true);
             }
         }
+    }
+
+    @EventHandler
+    public void onExplode(BlockExplodeEvent e) {
+        e.blockList().forEach(entry -> {
+            if (entry.getType().equals(Material.OAK_WALL_SIGN)) {
+                Block attached = MySQL_SafeChest.getBlockSignAttachedTo(entry);
+                if (attached.getType().equals(Material.CHEST)) {
+                    MySQL_SafeChest.deleteChest(attached.getLocation());
+                }
+            }
+
+
+            if (entry.getType().equals(Material.CHEST)) {
+                Location chest = e.getBlock().getLocation();
+                if (MySQL_SafeChest.isSafeChest(chest)) {
+                    MySQL_SafeChest.deleteChest(chest);
+                }
+            }
+        });
     }
 
 
