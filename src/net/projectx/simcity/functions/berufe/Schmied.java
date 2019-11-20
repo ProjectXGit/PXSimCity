@@ -2,10 +2,12 @@ package net.projectx.simcity.functions.berufe;
 
 import net.projectx.simcity.functions.mysql.MySQL_User;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -56,5 +58,20 @@ public class Schmied implements Listener {
 
         }
 
+    }
+
+    @EventHandler
+    public void Amboss(PlayerInteractEvent event){
+        Player p = event.getPlayer();
+        Block Amboss = event.getClickedBlock();
+        UUID uuid = p.getUniqueId();
+
+        if(Amboss.getType().equals(Material.ANVIL)){
+            if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")){
+                event.setCancelled(true);
+                p.sendMessage("§cDu muss ein Schmied sein, um Ambosse nutzen kann.");
+                return;
+            }
+        }
     }
 }
