@@ -22,9 +22,12 @@ public class cmd_plot {
 
     @PXCommand(
             name = "plot",
-            aliases = "p"
+            aliases = "p",
+            maxArgs = 0,
+            minArgs = 0
     )
     public void execute(CommandSender sender) {
+        builder = new StringBuilder();
         builder.append(prefix + "§7§lHilfsübersicht:§r\n");
         add("create", "Erstellt ein Grundstück");
         add("delete", "Löscht ein Grundstück");
@@ -42,7 +45,8 @@ public class cmd_plot {
             usage = "/plot create <name> <inCity>",
             minArgs = 2,
             maxArgs = 2,
-            noConsole = true
+            noConsole = true,
+            parent = "plot"
     )
     public void create(Player p, String name, boolean city) {
         if (!Plot.isPlotExists(name)) {
@@ -50,6 +54,7 @@ public class cmd_plot {
                 Location loc1 = new Location(p.getWorld(), wedit.getSession(p).getSelection((World) p.getWorld()).getMaximumPoint().getBlockX(), wedit.getSession(p).getSelection((World) p.getWorld()).getMaximumPoint().getBlockY(), wedit.getSession(p).getSelection((World) p.getWorld()).getMaximumPoint().getBlockZ());
                 Location loc2 = new Location(p.getWorld(), wedit.getSession(p).getSelection((World) p.getWorld()).getMinimumPoint().getBlockX(), wedit.getSession(p).getSelection((World) p.getWorld()).getMinimumPoint().getBlockY(), wedit.getSession(p).getSelection((World) p.getWorld()).getMinimumPoint().getBlockZ());
                 Plot.createPlot(name, loc1, loc2, city);
+                p.sendMessage(prefix + "§aPlot wurde erstellt!");
             } catch (IncompleteRegionException e) {
                 p.sendMessage(prefix + "Du musst zuerst die Ecken markieren!");
             }
@@ -62,7 +67,8 @@ public class cmd_plot {
             name = "delete",
             usage = "/plot delete <plot>",
             minArgs = 1,
-            maxArgs = 1
+            maxArgs = 1,
+            parent = "plot"
     )
     public void delete(CommandSender sender, String name) {
         if (!Plot.isPlotExists(name)) {
@@ -90,7 +96,8 @@ public class cmd_plot {
             name = "buy",
             minArgs = 1,
             maxArgs = 1,
-            usage = "/plot buy <plot>"
+            usage = "/plot buy <plot>",
+            parent = "plot"
     )
     public void buy(CommandSender sender, String name) {
 
@@ -100,7 +107,8 @@ public class cmd_plot {
             name = "confirm",
             minArgs = 1,
             maxArgs = 1,
-            usage = "/plot buy confirm <plot>"
+            usage = "/plot buy confirm <plot>",
+            parent = "plot"
     )
     public void confirmBuy(CommandSender sender, String name) {
 
@@ -110,7 +118,8 @@ public class cmd_plot {
             name = "sell",
             minArgs = 2,
             maxArgs = 2,
-            usage = "/plot sell <plot> <preis>"
+            usage = "/plot sell <plot> <preis>",
+            parent = "plot"
     )
     public void sell(CommandSender sender, String name, long price) {
 
@@ -120,7 +129,8 @@ public class cmd_plot {
             name = "sell",
             minArgs = 2,
             maxArgs = 2,
-            usage = "/plot sell confirm <plot> <preis>"
+            usage = "/plot sell confirm <plot> <preis>",
+            parent = "plot"
     )
     public void confirmSell(CommandSender sender, String name, long price) {
 
@@ -130,7 +140,8 @@ public class cmd_plot {
             name = "members",
             minArgs = 1,
             maxArgs = 1,
-            usage = "/plot members <plot>"
+            usage = "/plot members <plot>",
+            parent = "plot"
     )
     public void members(CommandSender sender) {
 
@@ -140,7 +151,8 @@ public class cmd_plot {
             name = "memberadd",
             minArgs = 2,
             maxArgs = 2,
-            usage = "/plot memberadd <plot> <member>"
+            usage = "/plot memberadd <plot> <member>",
+            parent = "plot"
     )
     public void memberadd(CommandSender sender, String plot, String member) {
 
@@ -150,7 +162,8 @@ public class cmd_plot {
             name = "memberremove",
             minArgs = 2,
             maxArgs = 2,
-            usage = "/plot memberadd <plot> <member>"
+            usage = "/plot memberadd <plot> <member>",
+            parent = "plot"
     )
     public void memberremove(CommandSender sender, String plot, String member) {
 
