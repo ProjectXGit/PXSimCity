@@ -40,17 +40,18 @@ public class Foerster implements Listener {
 
                     if(!p.isSneaking()) {
 
-                        Location loc = wood.getLocation();
-                        loc.setY(loc.getY() + 1);
-                        Block treeup = loc.getBlock();
+                        Location locold = wood.getLocation();
+                        Location locnew = locold;
+                        locnew.setY(locold.getY()+1);
+                        Block treeup = locnew.getBlock();
 
                         ItemStack wooddrop = new ItemStack(wood.getType(), 1);
 
-                        while (treeup.getType().equals(wood.getType())) {
+                        while (treeup.getType().equals(locold.getBlock().getType())) {
 
                             p.sendMessage("Über dem Holz ist noch eins");
 
-                            if (werkzeug.getDamage() == 0) {
+                            if (werkzeug.getDamage()==werkzeugitem.getType().getMaxDurability()) {
 
                                 p.sendMessage("Durability null");
                                 return;
