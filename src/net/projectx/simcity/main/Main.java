@@ -8,6 +8,7 @@ import net.projectx.simcity.functions.berufe.Miner;
 import net.projectx.simcity.functions.berufe.Schmied;
 import net.projectx.simcity.functions.berufe.Zuechter;
 import net.projectx.simcity.functions.commands.cmd_firework;
+import net.projectx.simcity.functions.commands.cmd_ping;
 import net.projectx.simcity.functions.commands.cmd_plot;
 import net.projectx.simcity.functions.commands.cmd_reload;
 import net.projectx.simcity.functions.mysql.MySQL;
@@ -73,6 +74,7 @@ public class Main extends JavaPlugin implements Plugin {
         register(new cmd_plot(), this);
         register(new cmd_reload(), this);
         register(new cmd_firework(), this);
+        register(new cmd_ping(), this);
     }
 
     public void registerListener() {
