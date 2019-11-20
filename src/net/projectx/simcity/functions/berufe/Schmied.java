@@ -15,7 +15,7 @@ import java.util.UUID;
 public class Schmied implements Listener {
     @EventHandler
     public void Schmieden(CraftItemEvent event) {
-        ItemStack item = event.getCurrentItem();
+        ItemStack item = event.getCursor();
         Player p = (Player) event.getWhoClicked();
         UUID uuid = p.getUniqueId();
 
@@ -31,12 +31,12 @@ public class Schmied implements Listener {
                                             if (item.getType().toString().endsWith("_HOE")) {
                                                 if (item.getType().toString().endsWith("_HELMET")) {
                                                     if (item.getType().toString().endsWith("_CHESTPLATE")) {
-                                                        if (item.getType().toString().endsWith("_LEGGINS")) {
+                                                        if (item.getType().toString().endsWith("_LEGGINGS")) {
                                                             if (item.getType().toString().endsWith("_HELMET")) {
                                                                 if (item.getType().toString().endsWith("_HORSE_ARMOR")) {
                                                                     if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
                                                                         event.setCancelled(true);
-                                                                        p.sendMessage("§cDafür musst du Schmied sein!");
+                                                                        p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
                                                                         return;
                                                                     } else {
                                                                         return;
@@ -66,10 +66,10 @@ public class Schmied implements Listener {
         Block Amboss = event.getClickedBlock();
         UUID uuid = p.getUniqueId();
 
-        if(Amboss.getType().equals(Material.ANVIL)){
+        if(Amboss.getType().toString().endsWith("ANVIL")){
             if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")){
                 event.setCancelled(true);
-                p.sendMessage("§cDu muss ein Schmied sein, um Ambosse nutzen kann.");
+                p.sendMessage("§cDu musst ein Schmied sein, um Ambosse nutzen kann.");
                 return;
             }
         }

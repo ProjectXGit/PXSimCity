@@ -5,10 +5,7 @@ import net.projectx.simcity.functions.JoinListener;
 import net.projectx.simcity.functions.SafeChest;
 import net.projectx.simcity.functions.Scheduler;
 import net.projectx.simcity.functions.Tablist;
-import net.projectx.simcity.functions.berufe.Foerster;
-import net.projectx.simcity.functions.berufe.Miner;
-import net.projectx.simcity.functions.berufe.Schmied;
-import net.projectx.simcity.functions.berufe.Zuechter;
+import net.projectx.simcity.functions.berufe.*;
 import net.projectx.simcity.functions.mysql.MySQL;
 import net.projectx.simcity.functions.mysql.MySQL_SafeChest;
 import net.projectx.simcity.functions.mysql.MySQL_User;
@@ -55,6 +52,7 @@ public class Main extends JavaPlugin implements Plugin {
         Bukkit.getPluginManager().registerEvents(new Miner(), this);
         Bukkit.getPluginManager().registerEvents(new Schmied(), this);
         Bukkit.getPluginManager().registerEvents(new Zuechter(), this);
+
     }
 
     public void createTables() {
