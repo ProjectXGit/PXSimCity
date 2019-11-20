@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,33 +18,36 @@ import java.util.UUID;
 
 public class Schmied implements Listener {
     @EventHandler
-    public void Schmieden(CraftItemEvent event) {
-        Inventory craftingtable = event.getInventory();
-        ItemStack item = event.getRecipe().getResult();
-        Player p = (Player) event.getWhoClicked();
-        UUID uuid = p.getUniqueId();
-
-        if (!item.getType().toString().startsWith("WOODEN_")) {
-            if (!item.getType().toString().startsWith("LEATHER_")) {
-                if (!item.getType().toString().startsWith("TURTLE_")) {
-                    if (!item.getType().toString().startsWith("CHAINMAIL_")) {
-                        if (!item.getType().toString().startsWith("STONE_")) {
-                            if (item.getType().toString().endsWith("_SWORD")) {
-                                if (item.getType().toString().endsWith("_PICKAXE")) {
-                                    if (item.getType().toString().endsWith("_AXE")) {
-                                        if (item.getType().toString().endsWith("_SHOVEL")) {
-                                            if (item.getType().toString().endsWith("_HOE")) {
-                                                if (item.getType().toString().endsWith("_HELMET")) {
-                                                    if (item.getType().toString().endsWith("_CHESTPLATE")) {
-                                                        if (item.getType().toString().endsWith("_LEGGINGS")) {
-                                                            if (item.getType().toString().endsWith("_HELMET")) {
-                                                                if (item.getType().toString().endsWith("_HORSE_ARMOR")) {
-                                                                    if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
-                                                                        event.setCancelled(true);
-                                                                        p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
-                                                                        return;
-                                                                    } else {
-                                                                        return;
+    public void Schmieden(PrepareItemCraftEvent event) {
+        if (event.getInventory().getHolder() instanceof Player) {
+            Inventory inventory = event.getInventory();
+            Player p = (Player) inventory.getHolder();
+            UUID uuid = p.getUniqueId();
+            if (inventory.getType().equals(InventoryType.WORKBENCH)) {
+                ItemStack item = event.getRecipe().getResult();
+                if (!item.getType().toString().startsWith("WOODEN_")) {
+                    if (!item.getType().toString().startsWith("LEATHER_")) {
+                        if (!item.getType().toString().startsWith("TURTLE_")) {
+                            if (!item.getType().toString().startsWith("CHAINMAIL_")) {
+                                if (!item.getType().toString().startsWith("STONE_")) {
+                                    if (item.getType().toString().endsWith("_SWORD")) {
+                                        if (item.getType().toString().endsWith("_PICKAXE")) {
+                                            if (item.getType().toString().endsWith("_AXE")) {
+                                                if (item.getType().toString().endsWith("_SHOVEL")) {
+                                                    if (item.getType().toString().endsWith("_HOE")) {
+                                                        if (item.getType().toString().endsWith("_HELMET")) {
+                                                            if (item.getType().toString().endsWith("_CHESTPLATE")) {
+                                                                if (item.getType().toString().endsWith("_LEGGINGS")) {
+                                                                    if (item.getType().toString().endsWith("_HELMET")) {
+                                                                        if (item.getType().toString().endsWith("_HORSE_ARMOR")) {
+                                                                            if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Schmied")) {
+                                                                                event.getInventory().setResult(new ItemStack(Material.AIR));
+                                                                                p.sendMessage("§cDu musst ein Schmied sein, um dieses Item craften zu können.");
+                                                                                return;
+                                                                            } else {
+                                                                                return;
+                                                                            }
+                                                                        }
                                                                     }
                                                                 }
                                                             }
@@ -56,11 +61,10 @@ public class Schmied implements Listener {
                             }
                         }
                     }
+
                 }
             }
-
         }
-
     }
 
     @EventHandler
