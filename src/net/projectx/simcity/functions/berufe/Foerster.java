@@ -40,17 +40,13 @@ public class Foerster implements Listener {
 
                     if(!p.isSneaking()) {
 
-                        Location locold = wood.getLocation();
-                        Location locnew = locold;
-                        locnew.setY(locold.getY()+1);
-                        Block treeup = locnew.getBlock();
-                        Block treeunder = locold.getBlock();
-
+                        Location loctreedown = wood.getLocation();
+                        Block lowest = loctreedown.getBlock();   //lowest block, block player destroys
+                        loctreedown.setY(loctreedown.getY()+1);
+                        Block treeup = loctreedown.getBlock();    //blocks of tree
                         ItemStack wooddrop = new ItemStack(wood.getType(), 1);
 
-                        while (treeup.getType().equals(treeunder.getType())) {
-                            treeunder = treeup;
-                            p.sendMessage("Über dem Holz ist noch eins");
+                        while (treeup.getType().equals(lowest.getType())) {
 
                             if (werkzeug.getDamage()==werkzeugitem.getType().getMaxDurability()-1) {
 
@@ -59,12 +55,18 @@ public class Foerster implements Listener {
 
                             }
 
+                            p.sendMessage("Über dem Holz ist noch eins");
                             treeup.setType(Material.AIR);
                             Bukkit.getWorld("world").dropItem(treeup.getLocation(), wooddrop);
 
-                            treeup.getLocation().setY(treeup.getLocation().getY() + 1);
+                            loctreedown.setY(loctreedown.getY()+1);
+                            treeup = loctreedown.getBlock();
 
                             werkzeug.setDamage((short) (werkzeug.getDamage() + 1));
+
+
+
+
                         }
 
                     }

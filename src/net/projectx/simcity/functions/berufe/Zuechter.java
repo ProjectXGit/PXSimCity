@@ -1,12 +1,19 @@
 package net.projectx.simcity.functions.berufe;
 
+
+import org.bukkit.event.entity.EntityBreedEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.inventory.ItemStack;
+
 import net.projectx.simcity.functions.mysql.MySQL_User;
+import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
+
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.util.Random;
@@ -18,49 +25,73 @@ public class Zuechter implements Listener {
     public void Tierkiller(EntityDeathEvent event) {
         Random random = new Random();
         LivingEntity dead = event.getEntity();
-        System.out.println("Tier gestorben!");
+
         if (event.getEntity().getKiller() instanceof Player) {
-            System.out.println("Tier von Spieler getötet!");
+
             Player p = event.getEntity().getKiller();
             UUID uuid = p.getUniqueId();
 
             if (dead instanceof Animals) {
-                System.out.println("War kein Mob!");
+
                 if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")) {
-                    System.out.println("War kein Züchter");
+
                     int rand = random.nextInt(5);
-                    System.out.println("Zufallszahl: " + rand);
+
                     if (rand == 0) {
                         return;
                     } else {
-                        System.out.println("Drop soll gecleared werden!");
+
                         event.getDrops().clear();
                         return;
                     }
                 }
-            } else {
-                System.out.println("War ein Mob!");
             }
         }
     }
 
 
     @EventHandler
-    public void LiebeMachen(PlayerInteractEntityEvent event) {
+    public void LiebeMachen(EntityBreedEvent event) {
+
+        if(event.getBreeder() instanceof Player) {
+            Player p = (Player) event.getBreeder();
+            UUID uuid = p.getUniqueId();
+            Entity entity = event.getEntity();
+
+            if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")){
+
+                event.setCancelled(true);
+                return;
+            }
+        }
+    }
+    @EventHandler
+    public void SchafSchere(PlayerShearEntityEvent event){
+
         Player p = event.getPlayer();
         UUID uuid = p.getUniqueId();
-        Entity entity = event.getRightClicked();
-        p.sendMessage("Spieler rechtsklickt " + entity);
-        if (entity instanceof Animals) {
-p.sendMessage("Spieler rechtsklickt animal");
-if(!((Animals) entity).isLoveMode()){
-    p.sendMessage("Spieler will tier lieben lassen.");
-    if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")){
-        event.setCancelled(true);
-        p.sendMessage("Jo du bist kein tierzüchter");
-        return;
+        Entity sheep = event.getEntity();
+
+        if(sheep.getType().equals(EntityType.SHEEP)){
+            if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")){
+                event.setCancelled(true);
+                return;
+            }
+        }
     }
-}
+    @EventHandler
+    public void Melken(PlayerInteractEntityEvent event){
+        Player p = event.getPlayer();
+        UUID uuid = p.getUniqueId();
+
+        if(event.getRightClicked() instanceof Cow){
+            Entity entity = event.getRightClicked();
+            if(p.getInventory().getItemInMainHand().getType().equals(Material.BUCKET)){
+                if(MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")){
+                    event.setCancelled(true);
+                    return;
+                }
+            }
         }
     }
 }
