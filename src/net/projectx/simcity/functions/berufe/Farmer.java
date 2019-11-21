@@ -40,18 +40,59 @@ public class Farmer implements Listener {
     }
 
     @EventHandler
-    public void DontSeed(BlockPlaceEvent event){
-        Block seeds = event.getBlockPlaced();
+    public void DontAcker(BlockPlaceEvent event){
+
         Player p = event.getPlayer();
         UUID uuid = p.getUniqueId();
-        if(seeds.getType().toString().endsWith("_SEEDS")||seeds.getType().equals(Material.POTATO)||seeds.getType().equals(Material.CARROT)){
-            if(event.getBlockAgainst().getType().equals(Material.FARMLAND)){
-                if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Farmer")){
-                    event.setCancelled(true);
-                    p.sendMessage("§cDu musst Farmer sein, um Äcker bepflanzen zu können.");
+
+        if(!event.getItemInHand().getType().equals(Material.AIR)) {
+            ItemStack seeds = event.getItemInHand();
+            if (seeds.getType().toString().endsWith("_SEEDS") || seeds.getType().equals(Material.POTATO) || seeds.getType().equals(Material.CARROT)) {
+
+                if (event.getBlockAgainst().getType().equals(Material.FARMLAND)) {
+
+                    if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Farmer")) {
+                        event.setCancelled(true);
+                        p.sendMessage("§cDu musst Farmer sein, um Äcker bepflanzen zu können.");
+                        return;
+                    }
                 }
             }
         }
+    }
+    @EventHandler
+    public void DontZuckerrohr(BlockPlaceEvent event){
 
+        Player p = event.getPlayer();
+        UUID uuid = p.getUniqueId();
+
+        if(!event.getItemInHand().getType().equals(Material.AIR)) {
+            ItemStack sugar = event.getItemInHand();
+            if(sugar.getType().equals(Material.SUGAR_CANE)){
+                if(event.getBlockAgainst().getType().equals(Material.DIRT)||event.getBlockAgainst().getType().equals(Material.SAND)){
+                    if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Farmer")){
+                        event.setCancelled(true);
+                        p.sendMessage("§cDu musst Farmer sein, um Zuckerrohr pflanzen zu können.");
+                    }
+                }
+            }
+        }
+    }
+    @EventHandler
+    public void DontCacao(BlockPlaceEvent event){
+        Player p = event.getPlayer();
+        UUID uuid = p.getUniqueId();
+
+        if(!event.getItemInHand().getType().equals(Material.AIR)) {
+            ItemStack sugar = event.getItemInHand();
+            if(sugar.getType().equals(Material.COCOA_BEANS)){
+                if(event.getBlockAgainst().getType().equals(Material.JUNGLE_LOG)){
+                    if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Farmer")){
+                        event.setCancelled(true);
+                        p.sendMessage("§cDu musst Farmer sein, um Zuckerrohr pflanzen zu können.");
+                    }
+                }
+            }
+        }
     }
 }
