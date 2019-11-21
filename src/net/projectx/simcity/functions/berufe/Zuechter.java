@@ -75,6 +75,7 @@ public class Zuechter implements Listener {
         if(sheep.getType().equals(EntityType.SHEEP)){
             if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Tierzuechter")){
                 event.setCancelled(true);
+                p.sendMessage("§cDu musst Tierzüchter sein, um Schafe scheren zu können.");
                 return;
             }
         }
@@ -87,9 +88,8 @@ public class Zuechter implements Listener {
         if(event.getRightClicked() instanceof Cow){
             Entity entity = event.getRightClicked();
             if(p.getInventory().getItemInMainHand().getType().equals(Material.BUCKET)){
-                if(MySQL_User.getJob(uuid).equalsIgnoreCase("Tierzuechter")){
-                    Damageable damageable = (Damageable) entity;
-                    damageable.damage(9.0,entity);
+                if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Tierzuechter")){
+                    p.sendMessage("§cDu musst Tierzüchter sein, um Kühe melken zu können.");
                     event.setCancelled(true);
                     return;
                 }

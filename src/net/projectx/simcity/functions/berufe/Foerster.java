@@ -32,7 +32,7 @@ public class Foerster implements Listener {
             }else {
                 p.sendMessage("Förster baut Holz ab");
                 ItemStack werkzeugitem = event.getPlayer().getInventory().getItemInMainHand();
-                Damageable werkzeug = (Damageable) event.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                Damageable werkzeug = (Damageable) event.getPlayer().getInventory().getItemInMainHand();
                 p.sendMessage(""+werkzeugitem);
                 if (werkzeugitem.getType().toString().endsWith("_AXE")) {
 

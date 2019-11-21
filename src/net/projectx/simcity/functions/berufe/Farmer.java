@@ -45,7 +45,7 @@ public class Farmer implements Listener {
         Player p = event.getPlayer();
         UUID uuid = p.getUniqueId();
         if(seeds.getType().toString().endsWith("_SEEDS")||seeds.getType().equals(Material.POTATO)||seeds.getType().equals(Material.CARROT)){
-            if(event.getBlockAgainst().getType().equals(Material.COARSE_DIRT)){
+            if(event.getBlockAgainst().getType().equals(Material.FARMLAND)){
                 if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Farmer")){
                     event.setCancelled(true);
                     p.sendMessage("§cDu musst Farmer sein, um Äcker bepflanzen zu können.");
