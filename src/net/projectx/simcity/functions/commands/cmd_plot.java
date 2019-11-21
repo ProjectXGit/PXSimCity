@@ -1,7 +1,7 @@
 package net.projectx.simcity.functions.commands;
 
 import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.world.World;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import net.projectx.simcity.functions.Plot;
 import net.projectx.simcity.functions.mysql.MySQL_Plot;
 import net.projectx.simcity.main.Data;
@@ -51,8 +51,9 @@ public class cmd_plot {
     public void create(Player p, String name, boolean city) {
         if (!Plot.isPlotExists(name)) {
             try {
-                Location loc1 = new Location(p.getWorld(), wedit.getSession(p).getSelection((World) p.getWorld()).getMaximumPoint().getBlockX(), wedit.getSession(p).getSelection((World) p.getWorld()).getMaximumPoint().getBlockY(), wedit.getSession(p).getSelection((World) p.getWorld()).getMaximumPoint().getBlockZ());
-                Location loc2 = new Location(p.getWorld(), wedit.getSession(p).getSelection((World) p.getWorld()).getMinimumPoint().getBlockX(), wedit.getSession(p).getSelection((World) p.getWorld()).getMinimumPoint().getBlockY(), wedit.getSession(p).getSelection((World) p.getWorld()).getMinimumPoint().getBlockZ());
+                com.sk89q.worldedit.entity.Player weplayer = BukkitAdapter.adapt(p);
+                Location loc1 = new Location(p.getWorld(), wedit.getSession(p).getSelection(weplayer.getWorld()).getMaximumPoint().getBlockX(), wedit.getSession(p).getSelection(weplayer.getWorld()).getMaximumPoint().getBlockY(), wedit.getSession(p).getSelection(weplayer.getWorld()).getMaximumPoint().getBlockZ());
+                Location loc2 = new Location(p.getWorld(), wedit.getSession(p).getSelection(weplayer.getWorld()).getMinimumPoint().getBlockX(), wedit.getSession(p).getSelection(weplayer.getWorld()).getMinimumPoint().getBlockY(), wedit.getSession(p).getSelection(weplayer.getWorld()).getMinimumPoint().getBlockZ());
                 Plot.createPlot(name, loc1, loc2, city);
                 p.sendMessage(prefix + "§aPlot wurde erstellt!");
             } catch (IncompleteRegionException e) {
@@ -70,11 +71,12 @@ public class cmd_plot {
             maxArgs = 1,
             parent = "plot"
     )
-    public void delete(CommandSender sender, String name) {
+    public void delete(Player p, String name) {
         if (!Plot.isPlotExists(name)) {
             Plot.deletePlot(name);
+            p.sendMessage(prefix + "§aDas Grundstück §e" + name + "§c wurde gelöscht!");
         } else {
-            sender.sendMessage(prefix + "§cDas Grundstück §e" + name + "§c existiert nicht!");
+            p.sendMessage(prefix + "§cDas Grundstück §e" + name + "§c existiert nicht!");
         }
     }
 

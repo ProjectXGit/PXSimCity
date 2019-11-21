@@ -1,8 +1,8 @@
 package net.projectx.simcity.functions;
 
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector2;
-import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedPolygonalRegion;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class Plot {
     public static RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-    public static RegionManager regions = container.get((World) Bukkit.getWorld("world"));
+    public static RegionManager regions = container.get(BukkitAdapter.adapt(Bukkit.getWorld("world")));
 
     public static void createPlot(String name, Location loc1, Location loc2, boolean city) {
         List<BlockVector2> list = new ArrayList<>();
