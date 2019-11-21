@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,7 +33,7 @@ public class Foerster implements Listener {
             }else {
                 p.sendMessage("Förster baut Holz ab");
                 ItemStack werkzeugitem = event.getPlayer().getInventory().getItemInMainHand();
-                Damageable werkzeug = (Damageable) event.getPlayer().getInventory().getItemInMainHand();
+
                 p.sendMessage(""+werkzeugitem);
                 if (werkzeugitem.getType().toString().endsWith("_AXE")) {
 
@@ -45,10 +46,15 @@ public class Foerster implements Listener {
                         loctreedown.setY(loctreedown.getY()+1);
                         Block treeup = loctreedown.getBlock();    //blocks of tree
                         ItemStack wooddrop = new ItemStack(wood.getType(), 1);
-
+                        int durabilitylevel;
+                        if(werkzeugitem.getItemMeta().hasEnchant(Enchantment.DURABILITY)){
+                            durabilitylevel = werkzeugitem.getEnchantmentLevel(Enchantment.DURABILITY)+1;
+                        }else{
+                            durabilitylevel = 1;
+                        }
                         while (treeup.getType().equals(lowest.getType())) {
 
-                            if (werkzeug.getDamage()==werkzeugitem.getType().getMaxDurability()-1) {
+                            if (werkzeugitem.getDurability()==werkzeugitem.getType().getMaxDurability()-1) {
 
                                 p.sendMessage("Durability null");
                                 return;
@@ -61,9 +67,10 @@ public class Foerster implements Listener {
 
                             loctreedown.setY(loctreedown.getY()+1);
                             treeup = loctreedown.getBlock();
-
-                            werkzeug.setDamage((short) (werkzeug.getDamage() + 1));
-
+                            int durabilityrandom = random.nextInt(100);
+                            if(durabilityrandom<=100/durabilitylevel) {
+                                werkzeugitem.setDurability((short) (werkzeugitem.getDurability() + 1));
+                            }
 
 
 
