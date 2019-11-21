@@ -88,6 +88,8 @@ public class Zuechter implements Listener {
             Entity entity = event.getRightClicked();
             if(p.getInventory().getItemInMainHand().getType().equals(Material.BUCKET)){
                 if(MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")){
+                    Damageable damageable = (Damageable) entity;
+                    damageable.damage(9.0,entity);
                     event.setCancelled(true);
                     return;
                 }
