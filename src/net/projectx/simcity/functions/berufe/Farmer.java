@@ -69,7 +69,7 @@ public class Farmer implements Listener {
         if(!event.getItemInHand().getType().equals(Material.AIR)) {
             ItemStack sugar = event.getItemInHand();
             if(sugar.getType().equals(Material.SUGAR_CANE)){
-                if(event.getBlockAgainst().getType().equals(Material.DIRT)||event.getBlockAgainst().getType().equals(Material.SAND)){
+                if(event.getBlockAgainst().getType().equals(Material.GRASS_BLOCK)||event.getBlockAgainst().getType().equals(Material.SAND)){
                     if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Farmer")){
                         event.setCancelled(true);
                         p.sendMessage("§cDu musst Farmer sein, um Zuckerrohr pflanzen zu können.");
@@ -89,7 +89,7 @@ public class Farmer implements Listener {
                 if(event.getBlockAgainst().getType().equals(Material.JUNGLE_LOG)){
                     if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Farmer")){
                         event.setCancelled(true);
-                        p.sendMessage("§cDu musst Farmer sein, um Zuckerrohr pflanzen zu können.");
+                        p.sendMessage("§cDu musst Farmer sein, um Kakaobohnen pflanzen zu können.");
                     }
                 }
             }
