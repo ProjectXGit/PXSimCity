@@ -33,7 +33,7 @@ public class Zuechter implements Listener {
 
             if (dead instanceof Animals) {
 
-                if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")) {
+                if (!MySQL_User.getJob(uuid).equalsIgnoreCase("Tierzuechter")) {
 
                     int rand = random.nextInt(5);
 
@@ -58,7 +58,7 @@ public class Zuechter implements Listener {
             UUID uuid = p.getUniqueId();
             Entity entity = event.getEntity();
 
-            if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")){
+            if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Tierzuechter")){
 
                 event.setCancelled(true);
                 return;
@@ -73,7 +73,7 @@ public class Zuechter implements Listener {
         Entity sheep = event.getEntity();
 
         if(sheep.getType().equals(EntityType.SHEEP)){
-            if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")){
+            if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Tierzuechter")){
                 event.setCancelled(true);
                 return;
             }
@@ -87,7 +87,7 @@ public class Zuechter implements Listener {
         if(event.getRightClicked() instanceof Cow){
             Entity entity = event.getRightClicked();
             if(p.getInventory().getItemInMainHand().getType().equals(Material.BUCKET)){
-                if(MySQL_User.getJob(uuid).equalsIgnoreCase("Zuechter")){
+                if(MySQL_User.getJob(uuid).equalsIgnoreCase("Tierzuechter")){
                     Damageable damageable = (Damageable) entity;
                     damageable.damage(9.0,entity);
                     event.setCancelled(true);
