@@ -60,6 +60,18 @@ public class MySQL_User {
         return null;
     }
 
+    public static String getName(String job) {
+        try {
+            ResultSet rs = MySQL.querry("SELECT name FROM user WHERE job = '" + job + "'");
+            while (rs.next()) {
+                return rs.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void setName(String name, UUID uuid) {
         MySQL.update("UPDATE user SET name = '" + name + "' WHERE uuid = '" + uuid + "'");
     }
