@@ -6,10 +6,7 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.projectx.simcity.functions.*;
 import net.projectx.simcity.functions.berufe.*;
-import net.projectx.simcity.functions.commands.cmd_firework;
-import net.projectx.simcity.functions.commands.cmd_ping;
-import net.projectx.simcity.functions.commands.cmd_plot;
-import net.projectx.simcity.functions.commands.cmd_reload;
+import net.projectx.simcity.functions.commands.*;
 import net.projectx.simcity.functions.mysql.MySQL;
 import net.projectx.simcity.functions.mysql.MySQL_Plot;
 import net.projectx.simcity.functions.mysql.MySQL_SafeChest;
@@ -88,6 +85,7 @@ public class Main extends JavaPlugin implements Plugin {
         register(new cmd_reload(), this);
         register(new cmd_firework(), this);
         register(new cmd_ping(), this);
+        register(new cmd_job(), this);
     }
 
     public void registerListener() {
@@ -99,6 +97,7 @@ public class Main extends JavaPlugin implements Plugin {
         Bukkit.getPluginManager().registerEvents(new Zuechter(), this);
         Bukkit.getPluginManager().registerEvents(new Farmer(), this);
         Bukkit.getPluginManager().registerEvents(new Elektriker(), this);
+        Bukkit.getPluginManager().registerEvents(new Buergermeister(), this);
         Bukkit.getPluginManager().registerEvents(new ChatEvent(), this);
 
     }

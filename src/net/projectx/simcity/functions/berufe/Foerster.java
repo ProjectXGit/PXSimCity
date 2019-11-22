@@ -31,13 +31,10 @@ public class Foerster implements Listener {
                     event.setDropItems(false);
                 }
             }else {
-                p.sendMessage("Förster baut Holz ab");
-                ItemStack werkzeugitem = event.getPlayer().getInventory().getItemInMainHand();
 
+                ItemStack werkzeugitem = event.getPlayer().getInventory().getItemInMainHand();
                 p.sendMessage(""+werkzeugitem);
                 if (werkzeugitem.getType().toString().endsWith("_AXE")) {
-
-                    p.sendMessage("Förster baut Holz mit Axt ab");
 
                     if(!p.isSneaking()) {
 
@@ -56,12 +53,11 @@ public class Foerster implements Listener {
 
                             if (werkzeugitem.getDurability()==werkzeugitem.getType().getMaxDurability()-1) {
 
-                                p.sendMessage("Durability null");
-                                return;
 
+                                return;
                             }
 
-                            p.sendMessage("Über dem Holz ist noch eins");
+
                             treeup.setType(Material.AIR);
                             Bukkit.getWorld("world").dropItem(treeup.getLocation(), wooddrop);
 
