@@ -99,6 +99,7 @@ public class Main extends JavaPlugin implements Plugin {
         Bukkit.getPluginManager().registerEvents(new Elektriker(), this);
         Bukkit.getPluginManager().registerEvents(new Buergermeister(), this);
         Bukkit.getPluginManager().registerEvents(new ChatEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new Plot(), this);
 
     }
 

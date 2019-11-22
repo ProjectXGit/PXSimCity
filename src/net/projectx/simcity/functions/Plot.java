@@ -15,10 +15,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static net.projectx.simcity.main.Data.prefix;
 
 /**
  * ~Yannick on 19.11.2019 at 16:09 o´ clock
@@ -78,6 +81,27 @@ public class Plot implements Listener {
     public void onBlockBreak(BlockBreakEvent e) {
         Player p = e.getPlayer();
         Location loc = e.getBlock().getLocation();
+        regions.getRegions().forEach((name, region) -> {
+            if (region.contains(BukkitAdapter.asBlockVector(loc))) {
+                if (!MySQL_Plot.getOwner(name).equals(p.getUniqueId()) && MySQL_Plot.getMembers(name).contains(p.getUniqueId())) {
+                    e.setCancelled(true);
+                    p.sendMessage(prefix + "§cDu darfst hier nicht bauen!");
+                }
+            }
+        });
+    }
+
+    public void onBlockPlace(BlockPlaceEvent e) {
+        Player p = e.getPlayer();
+        Location loc = e.getBlock().getLocation();
+        regions.getRegions().forEach((name, region) -> {
+            if (region.contains(BukkitAdapter.asBlockVector(loc))) {
+                if (!MySQL_Plot.getOwner(name).equals(p.getUniqueId()) && MySQL_Plot.getMembers(name).contains(p.getUniqueId())) {
+                    e.setCancelled(true);
+                    p.sendMessage(prefix + "§cDu darfst hier nicht bauen!");
+                }
+            }
+        });
     }
 
 
