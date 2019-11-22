@@ -19,7 +19,7 @@ public class MySQL_Plot {
     }
 
     public static void createPlot(String name, boolean city, long price) {
-        MySQL.update("INSERT INTO plot VALUES ('" + name + "', 'null', " + city + ")");
+        MySQL.update("INSERT INTO plot VALUES ('" + name + "', 'null', " + city + ", " + price + ", true)");
     }
 
     public static void deletePlot(String name) {
@@ -43,7 +43,7 @@ public class MySQL_Plot {
     public static ArrayList<String> getPlotsOf(UUID uuid) {
         ArrayList<String> list = new ArrayList<>();
         try {
-            ResultSet rs = MySQL.querry("SELECT name FROM plot WHERE uuid = '" + uuid + "'");
+            ResultSet rs = MySQL.querry("SELECT name FROM plot WHERE owner = '" + uuid + "'");
             while (rs.next()) {
                 list.add(rs.getString("name"));
             }
@@ -62,7 +62,12 @@ public class MySQL_Plot {
         try {
             ResultSet rs = MySQL.querry("SELECT owner FROM plot WHERE name = '" + plot + "'");
             while (rs.next()) {
-                return UUID.fromString(rs.getString("owner"));
+                String s = rs.getString("owner");
+                if (!s.equals("null")) {
+                    return UUID.fromString(s);
+                } else {
+                    return null;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,7 +114,7 @@ public class MySQL_Plot {
         return -1;
     }
 
-    public static void setPrice(int price, String plot) {
+    public static void setPrice(long price, String plot) {
         MySQL.update("UPDATE plot SET price = " + price + " WHERE name = '" + plot + "'");
     }
 
@@ -126,7 +131,7 @@ public class MySQL_Plot {
     }
 
     public static void setPurchaseable(boolean purchaseable, String plot) {
-        MySQL.update("UPDATE plot SET purchaseable = '" + purchaseable + "' WHERE name = '" + plot + "'");
+        MySQL.update("UPDATE plot SET purchaseable = " + purchaseable + " WHERE name = '" + plot + "'");
     }
 
     public static void addMember(UUID member, String plot) {
@@ -134,7 +139,7 @@ public class MySQL_Plot {
     }
 
     public static void removeMember(UUID member, String plot) {
-        MySQL.update("DELETE FROM member WHERE member = '" + member + "'");
+        MySQL.update("DELETE FROM member WHERE member = '" + member + "' AND plot = '" + plot + "'");
     }
 
     public static ArrayList<UUID> getMembers(String plot) {
@@ -148,6 +153,15 @@ public class MySQL_Plot {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public static void setMembers(ArrayList<UUID> list, String plot) {
+        MySQL.update("DELETE FROM member WHERE plot = '" + plot + "'");
+        if (list.size() != 0) {
+            list.forEach(entry -> {
+                addMember(entry, plot);
+            });
+        }
     }
 
 

@@ -35,6 +35,16 @@ public class MySQL_User {
         return false;
     }
 
+    public static boolean isUserExists(String name) {
+        try {
+            ResultSet rs = MySQL.querry("SELECT * FROM user WHERE name = '" + name + "'");
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static ArrayList<UUID> getUsers() {
         ArrayList<UUID> list = new ArrayList<>();
         try {
@@ -46,6 +56,18 @@ public class MySQL_User {
         } catch (SQLException e) {
             return null;
         }
+    }
+
+    public static UUID getUUID(String name) {
+        try {
+            ResultSet rs = MySQL.querry("SELECT uuid FROM user WHERE name = '" + name + "'");
+            while (rs.next()) {
+                return UUID.fromString(rs.getString("uuid"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static String getName(UUID uuid) {
