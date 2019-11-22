@@ -2,8 +2,13 @@ package net.projectx.simcity.functions.commands;
 
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.projectx.simcity.functions.Plot;
 import net.projectx.simcity.functions.mysql.MySQL_Plot;
+import net.projectx.simcity.functions.mysql.MySQL_User;
 import net.projectx.simcity.main.Data;
 import net.projectx.simcity.util.command.PXCommand;
 import org.bukkit.ChatColor;
@@ -71,8 +76,8 @@ public class cmd_plot {
             maxArgs = 1,
             parent = "plot"
     )
-    public void delete(Player p, String name) {
-        if (!Plot.isPlotExists(name)) {
+    public void delete(CommandSender p, String name) {
+        if (Plot.isPlotExists(name)) {
             Plot.deletePlot(name);
             p.sendMessage(prefix + "§aDas Grundstück §e" + name + "§c wurde gelöscht!");
         } else {
@@ -89,9 +94,34 @@ public class cmd_plot {
     public void list(CommandSender sender) {
         final String[] plots = {""};
         MySQL_Plot.getPlots().forEach(entry -> {
+            if (Plot.isPlotPurchaseable(entry)) {
+                plots[0] = plots[0] + entry;
+            }
+        });
+        if (plots.length != 0) {
+            sender.sendMessage(prefix + plots);
+        } else {
+            sender.sendMessage(prefix + "§cEs steht kein Grundstück zu Verkauf!");
+        }
+    }
+
+    @PXCommand(
+            name = "all",
+            minArgs = 0,
+            maxArgs = 0,
+            usage = "plot list all",
+            parent = "list"
+    )
+    public void listall(CommandSender sender) {
+        final String[] plots = {""};
+        MySQL_Plot.getPlots().forEach(entry -> {
             plots[0] = plots[0] + entry;
         });
-        sender.sendMessage(prefix + "");
+        if (plots.length != 0) {
+            sender.sendMessage(prefix + plots);
+        } else {
+            sender.sendMessage(prefix + "§cEs wurde noch kein Grundstück eingetragen!");
+        }
     }
 
     @PXCommand(
@@ -99,10 +129,27 @@ public class cmd_plot {
             minArgs = 1,
             maxArgs = 1,
             usage = "/plot buy <plot>",
-            parent = "plot"
+            parent = "plot",
+            noConsole = true
     )
-    public void buy(CommandSender sender, String name) {
-
+    public void buy(Player p, String name) {
+        if (Plot.isPlotExists(name)) {
+            if (Plot.isPlotPurchaseable(name)) {
+                if (MySQL_User.getDukaten(p.getUniqueId()) >= Plot.getPrice(name)) {
+                    TextComponent component = new TextComponent();
+                    component.setText(prefix + "§aKlicke §ehier§a um den das Grundstück §e" + name + "§a zu kaufen!");
+                    component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plot buy confirm " + name));
+                    component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§eHier Klicken!!").create()));
+                    p.spigot().sendMessage(component);
+                } else {
+                    p.sendMessage(prefix + "§cDU hast nicht genug Dukaten! Dir fehlen §e" + (Plot.getPrice(name) - MySQL_User.getDukaten(p.getUniqueId())) + "§c Dukaten!");
+                }
+            } else {
+                p.sendMessage(prefix + "§cDas Grundstück§e " + name + "§c steht nicht zu Verkauf!");
+            }
+        } else {
+            p.sendMessage(prefix + "§cDas Grundstück§e " + name + "§c gibt es nicht!");
+        }
     }
 
     @PXCommand(
@@ -110,10 +157,24 @@ public class cmd_plot {
             minArgs = 1,
             maxArgs = 1,
             usage = "/plot buy confirm <plot>",
-            parent = "plot"
+            parent = "plot",
+            noConsole = true
     )
-    public void confirmBuy(CommandSender sender, String name) {
-
+    public void confirmBuy(Player p, String name) {
+        if (Plot.isPlotExists(name)) {
+            if (Plot.isPlotPurchaseable(name)) {
+                if (MySQL_User.getDukaten(p.getUniqueId()) >= Plot.getPrice(name)) {
+                    Plot.buyPlot(name, p.getUniqueId());
+                    p.sendMessage(prefix + "§aDu hast erfolgreich das Grundstück §e" + name + "§a gekauft!");
+                } else {
+                    p.sendMessage(prefix + "§cDU hast nicht genug Dukaten! Dir fehlen §e" + (Plot.getPrice(name) - MySQL_User.getDukaten(p.getUniqueId())) + "§c Dukaten!");
+                }
+            } else {
+                p.sendMessage(prefix + "§cDas Grundstück§e " + name + "§c steht nicht zu Verkauf!");
+            }
+        } else {
+            p.sendMessage(prefix + "§cDas Grundstück§e " + name + "§c gibt es nicht!");
+        }
     }
 
     @PXCommand(
@@ -121,10 +182,27 @@ public class cmd_plot {
             minArgs = 2,
             maxArgs = 2,
             usage = "/plot sell <plot> <preis>",
-            parent = "plot"
+            parent = "plot",
+            noConsole = true
     )
-    public void sell(CommandSender sender, String name, long price) {
-
+    public void sell(Player p, String name, long price) {
+        if (Plot.isPlotExists(name)) {
+            if (MySQL_Plot.getOwner(name).equals(p.getName())) {
+                if (price >= Plot.getStandardPrice(name)) {
+                    TextComponent component = new TextComponent();
+                    component.setText(prefix + "§aKlicke §ehier§a um das Grundstück §e" + name + "§a für " + price + " §aDukaten zu verkaufen!");
+                    component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plot buy confirm " + name));
+                    component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§eHier Klicken!!").create()));
+                    p.spigot().sendMessage(component);
+                } else {
+                    p.sendMessage(prefix + "§cDu kannst das Grundstück nicht unter Wert verkaufen!");
+                }
+            } else {
+                p.sendMessage(prefix + "§cDas Grundstück§e " + name + "§c gehört nicht dir!");
+            }
+        } else {
+            p.sendMessage(prefix + "§cDas Grundstück§e " + name + "§c gibt es nicht!");
+        }
     }
 
     @PXCommand(
@@ -132,10 +210,23 @@ public class cmd_plot {
             minArgs = 2,
             maxArgs = 2,
             usage = "/plot sell confirm <plot> <preis>",
-            parent = "plot"
+            parent = "plot",
+            noConsole = true
     )
-    public void confirmSell(CommandSender sender, String name, long price) {
-
+    public void confirmSell(Player p, String name, long price) {
+        if (Plot.isPlotExists(name)) {
+            if (MySQL_Plot.getOwner(name).equals(p.getName())) {
+                if (price >= Plot.getStandardPrice(name)) {
+                    p.sendMessage(prefix + "Grundstück wurde zu Verkauf gestellt!");
+                } else {
+                    p.sendMessage(prefix + "§cDu kannst das Grundstück nicht unter Wert verkaufen!");
+                }
+            } else {
+                p.sendMessage(prefix + "§cDas Grundstück§e " + name + "§c gehört nicht dir!");
+            }
+        } else {
+            p.sendMessage(prefix + "§cDas Grundstück§e " + name + "§c gibt es nicht!");
+        }
     }
 
     @PXCommand(
@@ -145,8 +236,16 @@ public class cmd_plot {
             usage = "/plot members <plot>",
             parent = "plot"
     )
-    public void members(CommandSender sender) {
+    public void members(CommandSender sender, String name) {
+        if (Plot.isPlotExists(name)) {
+            if (MySQL_Plot.getMembers(name).size() != 0) {
 
+            } else {
+                sender.sendMessage(prefix + "Das Grundstück hat keine Member");
+            }
+        } else {
+            sender.sendMessage(prefix + "§cDas Grundstück§e " + name + "§c gibt es nicht!");
+        }
     }
 
     @PXCommand(

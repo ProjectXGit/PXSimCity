@@ -1,20 +1,15 @@
 package net.projectx.simcity.functions.berufe;
 
 
-import org.bukkit.event.entity.EntityBreedEvent;
-import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.event.player.PlayerShearEntityEvent;
-import org.bukkit.inventory.ItemStack;
-
 import net.projectx.simcity.functions.mysql.MySQL_User;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
+import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerShearEntityEvent;
 
 import java.util.Random;
 import java.util.UUID;
@@ -86,7 +81,6 @@ public class Zuechter implements Listener {
         UUID uuid = p.getUniqueId();
 
         if(event.getRightClicked() instanceof Cow){
-            Entity entity = event.getRightClicked();
             if(p.getInventory().getItemInMainHand().getType().equals(Material.BUCKET)){
                 if(!MySQL_User.getJob(uuid).equalsIgnoreCase("Tierzuechter")){
                     p.sendMessage("§cDu musst Tierzüchter sein, um Kühe melken zu können.");

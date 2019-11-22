@@ -64,11 +64,11 @@ public class MySQL_User {
         MySQL.update("UPDATE user SET name = '" + name + "' WHERE uuid = '" + uuid + "'");
     }
 
-    public static int getDukaten(UUID uuid) {
+    public static long getDukaten(UUID uuid) {
         try {
             ResultSet rs = MySQL.querry("SELECT dukaten FROM user WHERE uuid = '" + uuid + "'");
             while (rs.next()) {
-                return rs.getInt("dukaten");
+                return rs.getLong("dukaten");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -76,11 +76,11 @@ public class MySQL_User {
         return -1;
     }
 
-    public static void setDukaten(int dukaten, UUID uuid) {
+    public static void setDukaten(long dukaten, UUID uuid) {
         MySQL.update("UPDATE user SET dukaten = " + dukaten + " WHERE uuid = '" + uuid + "'");
     }
 
-    public static void addDukaten(int dukaten, UUID uuid) {
+    public static void addDukaten(long dukaten, UUID uuid) {
         setDukaten(getDukaten(uuid) + dukaten, uuid);
     }
 
