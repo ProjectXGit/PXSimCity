@@ -3,9 +3,7 @@ package net.projectx.simcity.functions.commands;
 import net.projectx.simcity.functions.mysql.MySQL_User;
 import net.projectx.simcity.main.Data;
 import net.projectx.simcity.util.command.PXCommand;
-import org.apache.logging.log4j.core.config.plugins.convert.TypeConverters;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -83,6 +81,19 @@ public class cmd_job {
         Player p = (Player) sender;
         UUID uuid = p.getUniqueId();
         MySQL_User.setJob("Arbeitslos",uuid);
+    }
+
+    @PXCommand(
+            name = "player",
+            usage = "job player <job>",
+            minArgs = 1,
+            maxArgs = 1,
+            parent = "job,"
+    )
+    public void player(CommandSender sender, String jobs){
+        Player p = (Player) sender;
+        UUID uuid = p.getUniqueId();
+
     }
 
     private void add(String command, String usage) {
