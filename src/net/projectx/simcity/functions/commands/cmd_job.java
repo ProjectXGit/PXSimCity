@@ -42,7 +42,7 @@ public class cmd_job {
 
     @PXCommand(
             name = "list",
-            usage = "job list",
+            usage = "/job list",
             minArgs = 0,
             maxArgs = 0,
             parent = "job"
@@ -63,7 +63,7 @@ public class cmd_job {
 
     @PXCommand(
             name = "get",
-            usage = "job get <job>",
+            usage = "/job get <job>",
             minArgs = 1,
             maxArgs = 1,
             parent = "job",
@@ -106,7 +106,7 @@ public class cmd_job {
 
     @PXCommand(
             name = "delete",
-            usage = "job delete",
+            usage = "/job delete",
             minArgs = 0,
             maxArgs = 0,
             parent = "job",
@@ -121,7 +121,7 @@ public class cmd_job {
 
     @PXCommand(
             name = "player",
-            usage = "job player <job>",
+            usage = "/job player <job>",
             minArgs = 1,
             maxArgs = 1,
             parent = "job"
