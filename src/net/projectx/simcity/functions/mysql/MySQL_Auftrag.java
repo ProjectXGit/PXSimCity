@@ -12,7 +12,7 @@ public class MySQL_Auftrag {
         MySQL.update("CREATE TABLE IF NOT EXISTS auftrag (auftragname VARCHAR(64), auftragsbeschreibung VARCHAR(300), spielername VARCHAR(64), plot VARCHAR(64), belohnung INTEGER)");
     }
 
-    public static void createAuftrag(String auftragname, String auftragsbeschreibung, String plot, BigInteger belohnung){
+    public static void createAuftrag(String auftragname, String auftragsbeschreibung, String plot, Integer belohnung){
         MySQL.update("INSERT INTO auftrag VALUES ('" + auftragname + "', '" + auftragsbeschreibung + "', 'null', '" + plot + "', '" + belohnung + "')");
     }
 

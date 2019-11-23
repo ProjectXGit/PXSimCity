@@ -1,5 +1,6 @@
 package net.projectx.simcity.functions.commands;
 
+import com.sun.imageio.plugins.common.I18N;
 import net.projectx.simcity.functions.Plot;
 import net.projectx.simcity.functions.mysql.MySQL_Auftrag;
 import net.projectx.simcity.functions.mysql.MySQL_Plot;
@@ -73,13 +74,13 @@ public class cmd_auftrag {
 
     @PXCommand(
             name = "create",
-            minArgs = 3,
-            maxArgs = 3,
+            minArgs = 4,
+            maxArgs = 4,
             usage = "/auftrag create <auftragname> <auftragsbeschreibung> <plot> <belohnung>",
             parent = "auftrag",
             noConsole = true
     )
-    public void create(CommandSender sender, String auftragname, String auftragsbeschreibung, String plot, BigInteger belohnung) {
+    public void create(CommandSender sender, String auftragname, String auftragsbeschreibung, String plot, Integer belohnung) {
         Player p = (Player) sender;
         UUID uuid = p.getUniqueId();
         if (!MySQL_Auftrag.getAuftraege().contains(auftragname)) {
