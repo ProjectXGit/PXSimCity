@@ -82,16 +82,17 @@ public class MySQL_User {
         return null;
     }
 
-    public static String getName(String job) {
+    public static ArrayList<String> getName(String job) {
+        ArrayList<String> list = new ArrayList<>();
         try {
             ResultSet rs = MySQL.querry("SELECT name FROM user WHERE job = '" + job + "'");
             while (rs.next()) {
-                return rs.getString("name");
+                list.add(rs.getString("name"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return list;
     }
 
     public static void setName(String name, UUID uuid) {
