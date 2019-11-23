@@ -124,13 +124,15 @@ public class cmd_job {
             usage = "job player <job>",
             minArgs = 1,
             maxArgs = 1,
-            parent = "job,"
+            parent = "job"
     )
     public void player(CommandSender sender, String jobs){
         Player p = (Player) sender;
         UUID uuid = p.getUniqueId();
         ArrayList<String> names = MySQL_User.getName(jobs);
-        p.sendMessage(names.toString());
+        for(int i=0; i<names.size();i++) {
+            p.sendMessage(names.get(i));
+        }
     }
 
     private void add(String command, String usage) {

@@ -7,10 +7,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.projectx.simcity.functions.*;
 import net.projectx.simcity.functions.berufe.*;
 import net.projectx.simcity.functions.commands.*;
-import net.projectx.simcity.functions.mysql.MySQL;
-import net.projectx.simcity.functions.mysql.MySQL_Plot;
-import net.projectx.simcity.functions.mysql.MySQL_SafeChest;
-import net.projectx.simcity.functions.mysql.MySQL_User;
+import net.projectx.simcity.functions.mysql.*;
 import net.projectx.simcity.util.command.BukkitCommand;
 import net.projectx.simcity.util.command.PXCommand;
 import org.bukkit.Bukkit;
@@ -87,6 +84,7 @@ public class Main extends JavaPlugin implements Plugin {
         register(new cmd_ping(), this);
         register(new cmd_job(), this);
         register(new cmd_dukaten(), this);
+        register(new cmd_auftrag(), this);
     }
 
     public void registerListener() {
@@ -109,6 +107,7 @@ public class Main extends JavaPlugin implements Plugin {
         MySQL_SafeChest.createUserTable();
         MySQL_Plot.createPlotTable();
         MySQL_Plot.createPlotMemberTable();
+        MySQL_Auftrag.createAuftragTable();
     }
 
 

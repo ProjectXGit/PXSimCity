@@ -71,7 +71,7 @@ public class cmd_dukaten {
     public void set(CommandSender sender, long dukaten, String name) {
         if (MySQL_User.isUserExists(name)) {
             MySQL_User.setDukaten(dukaten, MySQL_User.getUUID(name));
-            sender.sendMessage("§aDer Kontostand des Users wurde auf §e" + dukaten + "§a Dukaten gesetzt!");
+            sender.sendMessage("§aDer Kontostand des Users wurde auf §e " + dukaten + "§a Dukaten gesetzt!");
         } else {
             sender.sendMessage(prefix + "Der Spieler existiert nicht!");
         }
