@@ -1,13 +1,20 @@
 package net.projectx.simcity.functions.commands;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.projectx.simcity.functions.Plot;
 import net.projectx.simcity.functions.mysql.MySQL_User;
 import net.projectx.simcity.main.Data;
 import net.projectx.simcity.util.command.PXCommand;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import static net.projectx.simcity.main.Data.prefix;
@@ -66,7 +73,35 @@ public class cmd_job {
         String job = jobs;
         Player p = (Player) sender;
         UUID uuid = p.getUniqueId();
-        MySQL_User.setJob(job, uuid);
+        if(jobs.equalsIgnoreCase("Foerster")||jobs.equalsIgnoreCase("Farmer")||jobs.equalsIgnoreCase("Buergermeister")||jobs.equalsIgnoreCase("Elektriker")||jobs.equalsIgnoreCase("Miner")||jobs.equalsIgnoreCase("Schmied")||jobs.equalsIgnoreCase("Tierzuechter")) {
+            TextComponent component = new TextComponent();
+            component.setText(prefix + "§aKlicke §ehier§a um den Job §e" + jobs + "§a auszuwählen!");
+            component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/job confirm " + jobs));
+            component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§eHier Klicken!!").create()));
+            p.spigot().sendMessage(component);
+        }else{
+            p.sendMessage("§cDen Job gibt es nicht.");
+        }
+    }
+
+    @PXCommand(
+            name = "confirm",
+            minArgs = 1,
+            maxArgs = 1,
+            usage = "/job confirm <job>",
+            parent = "job",
+            noConsole = true
+    )
+    public void confirm(CommandSender sender, String jobs) {
+        String job = jobs;
+        Player p = (Player) sender;
+        UUID uuid = p.getUniqueId();
+        if (jobs.equalsIgnoreCase("Foerster")||jobs.equalsIgnoreCase("Farmer")||jobs.equalsIgnoreCase("Buergermeister")||jobs.equalsIgnoreCase("Elektriker")||jobs.equalsIgnoreCase("Miner")||jobs.equalsIgnoreCase("Schmied")||jobs.equalsIgnoreCase("Tierzuechter")) {
+            MySQL_User.setJob(job, uuid);
+            p.sendMessage("§eDu arbeitetest jetzt als "+ MySQL_User.getJob(uuid));
+        }else{
+            p.sendMessage("§cDen Job gibt es nicht.");
+        }
     }
 
     @PXCommand(
@@ -81,6 +116,7 @@ public class cmd_job {
         Player p = (Player) sender;
         UUID uuid = p.getUniqueId();
         MySQL_User.setJob("Arbeitslos",uuid);
+        p.sendMessage("§cDu ist jetzt ein arbeitsloser Schlucker");
     }
 
     @PXCommand(
@@ -93,7 +129,8 @@ public class cmd_job {
     public void player(CommandSender sender, String jobs){
         Player p = (Player) sender;
         UUID uuid = p.getUniqueId();
-
+        ArrayList<String> names = MySQL_User.getName(jobs);
+        p.sendMessage(names.toString());
     }
 
     private void add(String command, String usage) {

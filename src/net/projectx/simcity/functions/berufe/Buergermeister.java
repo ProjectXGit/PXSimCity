@@ -10,7 +10,7 @@ public class Buergermeister implements Listener {
 
     @EventHandler
     public void PlotCreater(CommandEvent event){
-        event.getArguments().equalsIgnoreCase("plot create");
+        event.getArguments().equalsIgnoreCase("/plot create");
         if(event.getActor().isPlayer()){
            Player p = (Player) event.getActor();
            p.setHealth(0);
