@@ -71,7 +71,22 @@ public class cmd_dukaten {
     public void set(CommandSender sender, long dukaten, String name) {
         if (MySQL_User.isUserExists(name)) {
             MySQL_User.setDukaten(dukaten, MySQL_User.getUUID(name));
-            sender.sendMessage("§eDer Kontostand des Users wurde auf" + dukaten + "§a Dukaten gesetzt!");
+            sender.sendMessage("§aDer Kontostand des Users wurde auf §e" + dukaten + "§a Dukaten gesetzt!");
+        } else {
+            sender.sendMessage(prefix + "Der Spieler existiert nicht!");
+        }
+    }
+
+    @PXCommand(
+            name = "get",
+            usage = "/dukaten get <Player>",
+            maxArgs = 2,
+            minArgs = 2,
+            parent = "dukaten"
+    )
+    public void get(CommandSender sender, String name) {
+        if (MySQL_User.isUserExists(name)) {
+            sender.sendMessage("§aDer Kontostand des Users beträgt:§e " + MySQL_User.getDukaten(MySQL_User.getUUID(name)) + "§a Dukaten");
         } else {
             sender.sendMessage(prefix + "Der Spieler existiert nicht!");
         }

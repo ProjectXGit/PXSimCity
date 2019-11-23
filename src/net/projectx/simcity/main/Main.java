@@ -86,6 +86,7 @@ public class Main extends JavaPlugin implements Plugin {
         register(new cmd_firework(), this);
         register(new cmd_ping(), this);
         register(new cmd_job(), this);
+        register(new cmd_dukaten(), this);
     }
 
     public void registerListener() {
