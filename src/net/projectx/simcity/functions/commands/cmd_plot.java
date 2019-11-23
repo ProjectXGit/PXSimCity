@@ -345,11 +345,12 @@ public class cmd_plot {
             minArgs = 2,
             maxArgs = 2,
             usage = "/plot memberadd <plot> <member>",
-            parent = "plot"
+            parent = "plot",
+            noConsole = true
     )
-    public void memberadd(CommandSender sender, String name, String member) {
+    public void memberadd(Player sender, String name, String member) {
         if (Plot.isPlotExists(name)) {
-            if (MySQL_Plot.getOwner(name).equals(sender.getName())) {
+            if (MySQL_Plot.getOwner(name).equals(sender.getUniqueId())) {
                 if (MySQL_User.isUserExists(member)) {
                     if (!MySQL_Plot.getMembers(name).contains(member)) {
                         MySQL_Plot.addMember(MySQL_User.getUUID(member), name);
@@ -378,7 +379,7 @@ public class cmd_plot {
     )
     public void memberremove(Player sender, String name, String member) {
         if (Plot.isPlotExists(name)) {
-            if (MySQL_Plot.getOwner(name).equals(sender.getName())) {
+            if (MySQL_Plot.getOwner(name).equals(sender.getUniqueId())) {
                 if (MySQL_User.isUserExists(member)) {
                     if (MySQL_Plot.getMembers(name).contains(member)) {
                         MySQL_Plot.removeMember(MySQL_User.getUUID(member), name);

@@ -15,7 +15,7 @@ public class MySQL_Plot {
     }
 
     public static void createPlotMemberTable() {
-        MySQL.update("CREATE TABLE IF NOT EXISTS member (plot VARCHAR(20), member VARCHAR(64), true)");
+        MySQL.update("CREATE TABLE IF NOT EXISTS members (plot VARCHAR(20), member VARCHAR(64), true)");
     }
 
     public static void createPlot(String name, boolean city, long price) {
@@ -162,7 +162,7 @@ public class MySQL_Plot {
     public static ArrayList<UUID> getMembers(String plot) {
         ArrayList<UUID> list = new ArrayList<>();
         try {
-            ResultSet rs = MySQL.querry("SELECT member FROM plot WHERE plot = '" + plot + "'");
+            ResultSet rs = MySQL.querry("SELECT member FROM member WHERE plot = '" + plot + "'");
             while (rs.next()) {
                 list.add(UUID.fromString(rs.getString("member")));
             }

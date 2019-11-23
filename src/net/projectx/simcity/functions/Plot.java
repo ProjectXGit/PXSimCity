@@ -79,7 +79,12 @@ public class Plot implements Listener {
         Location loc = e.getBlock().getLocation();
         Data.regions.getRegions().forEach((name, region) -> {
             if (containsLocation(region, loc)) {
-                if (!MySQL_Plot.getOwner(name).equals(p.getUniqueId()) && MySQL_Plot.getMembers(name).contains(p.getUniqueId())) {
+                if (!MySQL_Plot.getOwnerString(name).equals("null")) {
+                    if (!MySQL_Plot.getOwner(name).equals(p.getUniqueId()) && !MySQL_Plot.getMembers(name).contains(p.getUniqueId())) {
+                        e.setCancelled(true);
+                        p.sendMessage(prefix + "§cDu darfst hier nicht bauen!");
+                    }
+                } else {
                     e.setCancelled(true);
                     p.sendMessage(prefix + "§cDu darfst hier nicht bauen!");
                 }
@@ -93,7 +98,12 @@ public class Plot implements Listener {
         Location loc = e.getBlock().getLocation();
         Data.regions.getRegions().forEach((name, region) -> {
             if (containsLocation(region, loc)) {
-                if (!MySQL_Plot.getOwner(name).equals(p.getUniqueId()) && MySQL_Plot.getMembers(name).contains(p.getUniqueId())) {
+                if (!MySQL_Plot.getOwnerString(name).equals("null")) {
+                    if (!MySQL_Plot.getOwner(name).equals(p.getUniqueId()) && !MySQL_Plot.getMembers(name).contains(p.getUniqueId())) {
+                        e.setCancelled(true);
+                        p.sendMessage(prefix + "§cDu darfst hier nicht bauen!");
+                    }
+                } else {
                     e.setCancelled(true);
                     p.sendMessage(prefix + "§cDu darfst hier nicht bauen!");
                 }
@@ -104,8 +114,8 @@ public class Plot implements Listener {
     public static boolean containsLocation(ProtectedRegion region, Location loc) {
         BlockVector2 bv0 = region.getPoints().get(0);
         BlockVector2 bv1 = region.getPoints().get(1);
-        if (bv0.getBlockX() < loc.getBlockX() && loc.getBlockX() < bv1.getBlockX() || bv1.getBlockX() < loc.getBlockX() && loc.getBlockX() < bv0.getBlockX()) {
-            if (bv0.getBlockZ() < loc.getBlockZ() && loc.getBlockZ() < bv1.getBlockX() || bv1.getBlockZ() < loc.getBlockZ() && loc.getBlockZ() < bv0.getBlockZ()) {
+        if (bv0.getBlockX() <= loc.getBlockX() && loc.getBlockX() <= bv1.getBlockX() || bv1.getBlockX() <= loc.getBlockX() && loc.getBlockX() <= bv0.getBlockX()) {
+            if (bv0.getBlockZ() <= loc.getBlockZ() && loc.getBlockZ() <= bv1.getBlockX() || bv1.getBlockZ() <= loc.getBlockZ() && loc.getBlockZ() <= bv0.getBlockZ()) {
                 return true;
             }
         }
