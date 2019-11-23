@@ -16,6 +16,8 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 import static net.projectx.simcity.main.Data.prefix;
 import static net.projectx.simcity.main.Data.wedit;
 
@@ -74,6 +76,37 @@ public class cmd_plot {
     }
 
     @PXCommand(
+            name = "createstate",
+            usage = "/plot createstate <name>",
+            minArgs = 1,
+            maxArgs = 1,
+            noConsole = true,
+            parent = "plot"
+    )
+    public void createState(Player p, String name) {
+        if (MySQL_User.getJob(p.getUniqueId()).equals("Buergermeister")) {
+            if (!Plot.isPlotExists(name)) {
+                try {
+                    com.sk89q.worldedit.entity.Player weplayer = BukkitAdapter.adapt(p);
+                    Location loc1 = new Location(p.getWorld(), wedit.getSession(p).getSelection(weplayer.getWorld()).getMaximumPoint().getBlockX(), wedit.getSession(p).getSelection(weplayer.getWorld()).getMaximumPoint().getBlockY(), wedit.getSession(p).getSelection(weplayer.getWorld()).getMaximumPoint().getBlockZ());
+                    Location loc2 = new Location(p.getWorld(), wedit.getSession(p).getSelection(weplayer.getWorld()).getMinimumPoint().getBlockX(), wedit.getSession(p).getSelection(weplayer.getWorld()).getMinimumPoint().getBlockY(), wedit.getSession(p).getSelection(weplayer.getWorld()).getMinimumPoint().getBlockZ());
+                    Plot.createPlot(name, loc1, loc2, true);
+                    MySQL_Plot.setMembers(new ArrayList<>(), name);
+                    MySQL_Plot.setOwnerString("Staat", name);
+                    MySQL_Plot.setPurchaseable(false, name);
+                    p.sendMessage(prefix + "§aPlot wurde erstellt!");
+                } catch (IncompleteRegionException e) {
+                    p.sendMessage(prefix + "Du musst zuerst die Ecken markieren!");
+                }
+            } else {
+                p.sendMessage(prefix + "§cDas Grundstück §e" + name + "§c existiert bereits!");
+            }
+        } else {
+            p.sendMessage(prefix + "§cDas kann nur der Bürgermeister!");
+        }
+    }
+
+    @PXCommand(
             name = "delete",
             usage = "/plot delete <plot>",
             minArgs = 1,
@@ -84,7 +117,7 @@ public class cmd_plot {
     public void delete(Player p, String name) {
         if (MySQL_User.getJob(p.getUniqueId()).equals("Buergermeister")) {
             if (Plot.isPlotExists(name)) {
-                if (MySQL_Plot.getOwner(name) == null) {
+                if (MySQL_Plot.getOwnerString(name).equals("null")) {
                     TextComponent component = new TextComponent();
                     component.setText(prefix + "§aKlicke §ehier§a um das Grundstück §e" + name + "§a zu löschen!!");
                     component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plot deleteconfirm " + name));
@@ -112,7 +145,7 @@ public class cmd_plot {
     public void deleteconfirm(Player p, String name) {
         if (MySQL_User.getJob(p.getUniqueId()).equals("Buergermeister")) {
             if (Plot.isPlotExists(name)) {
-                if (MySQL_Plot.getOwner(name) == null) {
+                if (MySQL_Plot.getOwnerString(name).equals("null")) {
                     Plot.deletePlot(name);
                     p.sendMessage(prefix + "§aDas Grundstück §e" + name + "§a wurde gelöscht!");
                 } else {

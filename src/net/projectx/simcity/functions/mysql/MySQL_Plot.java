@@ -75,6 +75,23 @@ public class MySQL_Plot {
         return null;
     }
 
+    public static String getOwnerString(String plot) {
+        try {
+            ResultSet rs = MySQL.querry("SELECT owner FROM plot WHERE name = '" + plot + "'");
+            while (rs.next()) {
+                return rs.getString("owner");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void setOwnerString(String owner, String plot) {
+        MySQL.update("UPDATE plot SET owner = '" + owner + "' WHERE name = '" + plot + "'");
+
+    }
+
     public static void setOwner(UUID uuid, String plot) {
         String owner;
         if (uuid != null) {

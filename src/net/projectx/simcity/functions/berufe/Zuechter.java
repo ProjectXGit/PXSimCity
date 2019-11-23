@@ -1,7 +1,11 @@
 package net.projectx.simcity.functions.berufe;
 
 
+import com.sk89q.worldedit.math.BlockVector2;
+import net.projectx.simcity.functions.mysql.MySQL_Plot;
 import net.projectx.simcity.functions.mysql.MySQL_User;
+import net.projectx.simcity.main.Data;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -40,6 +44,27 @@ public class Zuechter implements Listener {
                         return;
                     }
                 }
+            }
+        } else {
+            final boolean[] onPlotOfZuechter = {false};
+            MySQL_User.getUsers().forEach(entry -> {
+                if (MySQL_User.getJob(entry).equals("Tierzuechter")) {
+                    MySQL_Plot.getPlotsOf(entry).forEach(plot -> {
+                        BlockVector2 bv0 = Data.regions.getRegion(plot).getPoints().get(0);
+                        BlockVector2 bv1 = Data.regions.getRegion(plot).getPoints().get(1);
+                        Location loc = dead.getLocation();
+                        if (bv0.getBlockX() < loc.getBlockX() && loc.getBlockX() < bv1.getBlockX() || bv1.getBlockX() < loc.getBlockX() && loc.getBlockX() < bv0.getBlockX()) {
+                            System.out.println();
+                            if (bv0.getBlockZ() < loc.getBlockZ() && loc.getBlockZ() < bv1.getBlockX() || bv1.getBlockZ() < loc.getBlockZ() && loc.getBlockZ() < bv0.getBlockZ()) {
+                                onPlotOfZuechter[0] = true;
+                            }
+                        }
+                    });
+                }
+            });
+            if (!onPlotOfZuechter[0]) {
+                event.getDrops().clear();
+                return;
             }
         }
     }

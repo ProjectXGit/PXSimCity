@@ -118,7 +118,7 @@ public class MySQL_User {
         setDukaten(getDukaten(uuid) + dukaten, uuid);
     }
 
-    public static void removeDukaten(int dukaten, UUID uuid) {
+    public static void removeDukaten(long dukaten, UUID uuid) {
         setDukaten(getDukaten(uuid) - dukaten, uuid);
     }
 

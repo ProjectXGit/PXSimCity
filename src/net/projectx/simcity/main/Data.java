@@ -1,8 +1,12 @@
 package net.projectx.simcity.main;
 
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
 import net.projectx.simcity.functions.Tablist;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -28,4 +32,6 @@ public class Data {
     public static HashMap<Location, Integer> fireworks = new HashMap<>();
     public static WorldEditPlugin wedit;
     public static WorldGuardPlugin wguard;
+    public static RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+    public static RegionManager regions = container.get(BukkitAdapter.adapt(Bukkit.getWorld("world")));
 }
