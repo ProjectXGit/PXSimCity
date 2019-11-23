@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +39,7 @@ public class Main extends JavaPlugin implements Plugin {
     @Override
     public void onEnable() {
         Data.instance = this;
+        new File("plugins/" + Data.instance.getDescription().getName() + "/Heads").mkdir();
         registerCommands();
         registerListener();
         MySQL.connect();
@@ -100,6 +102,7 @@ public class Main extends JavaPlugin implements Plugin {
         Bukkit.getPluginManager().registerEvents(new Buergermeister(), this);
         Bukkit.getPluginManager().registerEvents(new ChatEvent(), this);
         Bukkit.getPluginManager().registerEvents(new Plot(), this);
+        Bukkit.getPluginManager().registerEvents(new Motd(), this);
 
     }
 

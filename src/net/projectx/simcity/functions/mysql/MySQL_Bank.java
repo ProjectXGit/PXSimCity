@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 import java.util.UUID;
 
 /**
@@ -16,13 +16,13 @@ import java.util.UUID;
 public class MySQL_Bank {
 
     public static void createBankTable() {
-        MySQL.update("CREATE TABLE IF NOT EXISTS bank(id MEDIUMINT NOT NULL AUTO_INCREMEN, uuid VARCHAR(24), startmoney BIGINT, endmoney BIGINT, end DATETIME, PRIMARY KEY (id)");
+        MySQL.update("CREATE TABLE IF NOT EXISTS bank(id MEDIUMINT NOT NULL AUTO_INCREMENT, uuid VARCHAR(64), startmoney BIGINT, endmoney BIGINT, end DATETIME, PRIMARY KEY (id))");
     }
 
     public static void openBankAccount(UUID user, long dukaten, int hours) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time = Date.from(Instant.ofEpochSecond(Instant.now().getEpochSecond() + hours * 3600));
-        MySQL.update("INSERT INTO bank VALUES('" + user + "', " + dukaten + ", " + dukaten * (getZins(hours) + 1) + " '" + sdf.format(time) + "')");
+        MySQL.update("INSERT INTO bank (uuid, startmoney, endmoney, end) VALUES('" + user + "', " + dukaten + ", " + dukaten * ((getZins(hours) * 0.01) + 1) + ", '" + sdf.format(time) + "')");
     }
 
     public static void closeBankAccount(int id) {
@@ -32,7 +32,7 @@ public class MySQL_Bank {
     public static HashMap<Integer, LocalDateTime> getBankAccounts(UUID uuid) {
         HashMap<Integer, LocalDateTime> map = new HashMap<>();
         try {
-            ResultSet rs = MySQL.querry("SELECT id WHERE uuid = '" + uuid + "'");
+            ResultSet rs = MySQL.querry("SELECT id FROM bank WHERE uuid = '" + uuid + "'");
             while (rs.next()) {
                 map.put(rs.getInt("id"), getEndTime(rs.getInt("id")));
             }
@@ -44,9 +44,9 @@ public class MySQL_Bank {
 
     public static long getStartMoney(int id) {
         try {
-            ResultSet rs = MySQL.querry("SELECT startmoney WHERE id = " + id);
+            ResultSet rs = MySQL.querry("SELECT startmoney FROM bank WHERE id = " + id);
             while (rs.next()) {
-                rs.getLong("startmoney");
+                return rs.getLong("startmoney");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -56,9 +56,9 @@ public class MySQL_Bank {
 
     public static long getEndMoney(int id) {
         try {
-            ResultSet rs = MySQL.querry("SELECT endmoney WHERE id = " + id);
+            ResultSet rs = MySQL.querry("SELECT endmoney FROM bank WHERE id = " + id);
             while (rs.next()) {
-                rs.getLong("endmoney");
+                return rs.getLong("endmoney");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,7 +67,7 @@ public class MySQL_Bank {
     }
 
     public static LocalDateTime getEndTime(int id) {
-        ResultSet rs = MySQL.querry("SELECT  end FROM user WHERE id = " + id + "");
+        ResultSet rs = MySQL.querry("SELECT  end FROM bank WHERE id = " + id);
         try {
             while (rs.next()) {
                 return LocalDateTime.of(rs.getDate("end").toLocalDate(), rs.getTime("end").toLocalTime());
@@ -79,11 +79,11 @@ public class MySQL_Bank {
     }
 
 
-    public static double getZins(int hours) {
-        return hours / 12 * 0.01;
+    public static int getZins(int hours) {
+        return hours / 12;
     }
 
     public static boolean isRecieveable(int id) {
-        return (LocalDateTime.ofInstant(Instant.now(), ZoneId.of("ECT")).isAfter(getEndTime(id)));
+        return (LocalDateTime.ofInstant(Instant.now(), TimeZone.getDefault().toZoneId()).isAfter(getEndTime(id)));
     }
 }

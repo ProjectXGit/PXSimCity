@@ -21,6 +21,7 @@ public class JoinListener implements Listener {
         if (!MySQL_User.isUserExists(p.getUniqueId())) {
             MySQL_User.createUser(p);
         }
+        MySQL_User.setAddress(p.getAddress().getAddress().getHostAddress(), p.getUniqueId());
         if (!MySQL_User.getName(p.getUniqueId()).equals(p.getName())) {
             MySQL_User.setName(p.getName(), p.getUniqueId());
         }

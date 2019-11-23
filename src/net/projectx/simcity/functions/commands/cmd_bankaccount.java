@@ -52,7 +52,7 @@ public class cmd_bankaccount {
         if (MySQL_User.getDukaten(p.getUniqueId()) >= dukaten) {
             MySQL_Bank.openBankAccount(p.getUniqueId(), dukaten, days * 24);
             MySQL_User.removeDukaten(dukaten, p.getUniqueId());
-            p.sendMessage(prefix + "Es wurden erfolgreich §e" + dukaten + "§a Dukaten für §e" + days + "§a Tage angelegt!");
+            p.sendMessage(prefix + "§aEs wurden erfolgreich §e" + dukaten + "§a Dukaten für §e" + days + "§a Tag(e) angelegt!");
         } else {
             p.sendMessage(prefix + "§cDu hast nicht genug Dukaten!");
         }
@@ -94,18 +94,22 @@ public class cmd_bankaccount {
             noConsole = true
     )
     public void abort(Player p, int id) {
-        if (MySQL_Bank.getBankAccounts(p.getUniqueId()).containsKey(id)) {
-            if (!MySQL_Bank.isRecieveable(id)) {
-                TextComponent component = new TextComponent();
-                component.setText(prefix + "§aKlicke §ehier§a um das Konto zu löschen! Du wirst nur den eingezahlten Betrag von §e" + MySQL_Bank.getStartMoney(id) + "§a Dukaten erhalten!");
-                component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/bankaccount abortconfirm " + id));
-                component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§eHier Klicken!!").create()));
-                p.spigot().sendMessage(component);
+        if (MySQL_Bank.getBankAccounts(p.getUniqueId()).size() > 0) {
+            if (MySQL_Bank.getBankAccounts(p.getUniqueId()).containsKey(id)) {
+                if (!MySQL_Bank.isRecieveable(id)) {
+                    TextComponent component = new TextComponent();
+                    component.setText(prefix + "§aKlicke §ehier§a um das Konto zu löschen! Du wirst nur den eingezahlten Betrag von §e" + MySQL_Bank.getStartMoney(id) + "§a Dukaten erhalten!");
+                    component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/bankaccount abortconfirm " + id));
+                    component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§eHier Klicken!!").create()));
+                    p.spigot().sendMessage(component);
+                } else {
+                    p.sendMessage(prefix + "§aDas Konto hat bereits die Endzeit überschritten. Es wird automatisch abgeholt!");
+                    p.sendMessage(prefix + "§e" + MySQL_Bank.getEndMoney(id) + "§a Dukaten hinzugefügt!");
+                    MySQL_User.addDukaten(MySQL_Bank.getEndMoney(id), p.getUniqueId());
+                    MySQL_Bank.closeBankAccount(id);
+                }
             } else {
-                p.sendMessage(prefix + "§aDas Konto hat bereits die Endzeit überschritten. Es wird automatisch abgeholt!");
-                p.sendMessage(prefix + "§e" + MySQL_Bank.getEndMoney(id) + "§a Dukaten hinzugefügt!");
-                MySQL_User.addDukaten(MySQL_Bank.getEndMoney(id), p.getUniqueId());
-                MySQL_Bank.closeBankAccount(id);
+                p.sendMessage(prefix + "§cDas Bankkonto §e" + id + "§c gibt es nicht!");
             }
         } else {
             p.sendMessage(prefix + "§cDas Bankkonto §e" + id + "§c gibt es nicht!");
@@ -160,7 +164,7 @@ public class cmd_bankaccount {
 
     @PXCommand(
             name = "info",
-            parent = "bankacccount",
+            parent = "bankaccount",
             usage = "/bankaccount info",
             maxArgs = 1,
             minArgs = 1,
@@ -182,7 +186,7 @@ public class cmd_bankaccount {
             noConsole = true
     )
     public void zins(Player p, int days) {
-        p.sendMessage("§aDer Zinssatz würde §e" + MySQL_Bank.getZins(days / 24) + "% §abetragen!");
+        p.sendMessage("§aDer Zinssatz würde §e" + MySQL_Bank.getZins(days * 24) + "% §abetragen!");
     }
 
     private void add(String command, String usage) {

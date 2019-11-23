@@ -15,14 +15,14 @@ import java.util.UUID;
  */
 public class MySQL_User {
     public static void createUserTable() {
-        MySQL.update("CREATE TABLE IF NOT EXISTS user(name VARCHAR(20), uuid VARCHAR(64), dukaten BIGINT, job VARCHAR(20), playtime BIGINT,  lastJoin DATETIME)");
+        MySQL.update("CREATE TABLE IF NOT EXISTS user(name VARCHAR(20), uuid VARCHAR(64), address VARCHAR(64), dukaten BIGINT, job VARCHAR(20), playtime BIGINT,  lastJoin DATETIME)");
     }
 
     public static void createUser(Player p) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time = Date.from(Instant.now());
-        System.out.println();
-        MySQL.update("INSERT INTO `user` VALUES ('" + p.getName() + "','" + p.getUniqueId().toString() + "', 0, '', 0, '" + sdf.format(time) + "')");
+        String ip = "" + p.getAddress().getAddress().getHostAddress();
+        MySQL.update("INSERT INTO `user` VALUES ('" + p.getName() + "','" + p.getUniqueId().toString() + "', '" + ip + "', 0, '', 0, '" + sdf.format(time) + "')");
     }
 
     public static boolean isUserExists(UUID uuid) {
@@ -82,6 +82,18 @@ public class MySQL_User {
         return null;
     }
 
+    public static String getNameByAddress(String address) {
+        try {
+            ResultSet rs = MySQL.querry("SELECT name FROM user WHERE address = '" + address + "'");
+            while (rs.next()) {
+                return rs.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static ArrayList<String> getName(String job) {
         ArrayList<String> list = new ArrayList<>();
         try {
@@ -97,6 +109,22 @@ public class MySQL_User {
 
     public static void setName(String name, UUID uuid) {
         MySQL.update("UPDATE user SET name = '" + name + "' WHERE uuid = '" + uuid + "'");
+    }
+
+    public static String getAddress(UUID uuid) {
+        try {
+            ResultSet rs = MySQL.querry("SELECT address FROM user WHERE uuid = '" + uuid + "'");
+            while (rs.next()) {
+                return rs.getString("address");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void setAddress(String address, UUID uuid) {
+        MySQL.update("UPDATE user SET address = '" + address + "' WHERE uuid = '" + uuid + "'");
     }
 
     public static long getDukaten(UUID uuid) {
