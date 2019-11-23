@@ -325,10 +325,10 @@ public class cmd_plot {
             final String[] plots = {""};
             if (MySQL_Plot.getMembers(name).size() != 0) {
                 MySQL_Plot.getMembers(name).forEach(entry -> {
-                    plots[0] = plots[0] + entry;
+                    plots[0] = plots[0] + "§e" + MySQL_User.getName(entry) + "§7,";
                 });
                 if (plots.length != 0) {
-                    sender.sendMessage(prefix + plots);
+                    sender.sendMessage(prefix + plots[0]);
                 } else {
                     sender.sendMessage(prefix + "§cEs steht kein Grundstück zu Verkauf!");
                 }
@@ -373,16 +373,16 @@ public class cmd_plot {
             name = "memberremove",
             minArgs = 2,
             maxArgs = 2,
-            usage = "/plot memberadd <plot> <member>",
+            usage = "/plot memberremove <plot> <member>",
             parent = "plot",
             noConsole = true
     )
-    public void memberremove(Player sender, String name, String member) {
-        if (Plot.isPlotExists(name)) {
-            if (MySQL_Plot.getOwner(name).equals(sender.getUniqueId())) {
+    public void memberremove(Player sender, String plot, String member) {
+        if (Plot.isPlotExists(plot)) {
+            if (MySQL_Plot.getOwner(plot).equals(sender.getUniqueId())) {
                 if (MySQL_User.isUserExists(member)) {
-                    if (MySQL_Plot.getMembers(name).contains(member)) {
-                        MySQL_Plot.removeMember(MySQL_User.getUUID(member), name);
+                    if (MySQL_Plot.getMembers(plot).contains(MySQL_User.getUUID(member))) {
+                        MySQL_Plot.removeMember(MySQL_User.getUUID(member), plot);
                         sender.sendMessage(prefix + "§aDer Spieler §e" + member + "§a wurde als Mitglied entfernt!");
                     } else {
                         sender.sendMessage(prefix + "§cSpieler ist kein Mitglied des Plots!");
@@ -394,7 +394,7 @@ public class cmd_plot {
                 sender.sendMessage(prefix + "§cDu bist nicht der Owner dieses Grundstücks!");
             }
         } else {
-            sender.sendMessage(prefix + "§cDas Grundstück§e " + name + "§c gibt es nicht!");
+            sender.sendMessage(prefix + "§cDas Grundstück§e " + plot + "§c gibt es nicht!");
         }
     }
 
