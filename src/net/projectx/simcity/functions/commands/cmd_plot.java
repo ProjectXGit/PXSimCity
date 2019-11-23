@@ -2,6 +2,7 @@ package net.projectx.simcity.functions.commands;
 
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector2;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -17,9 +18,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static net.projectx.simcity.main.Data.prefix;
-import static net.projectx.simcity.main.Data.wedit;
+import static net.projectx.simcity.main.Data.*;
 
 /**
  * ~Yannick on 19.11.2019 at 09:09 o´ clock
@@ -44,6 +45,7 @@ public class cmd_plot {
         add("members", "Listet alle Mitglieder eines Grundstücks auf");
         add("memberadd", "Fügt ein Mitglied hinzu!");
         add("memberremove", "Entfernt ein Mitglied");
+        add("edges", "Gibt die Ecken eines Grundstücks aus!");
         sender.sendMessage(builder.toString());
     }
 
@@ -117,15 +119,11 @@ public class cmd_plot {
     public void delete(Player p, String name) {
         if (MySQL_User.getJob(p.getUniqueId()).equals("Buergermeister")) {
             if (Plot.isPlotExists(name)) {
-                if (MySQL_Plot.getOwnerString(name).equals("null")) {
                     TextComponent component = new TextComponent();
                     component.setText(prefix + "§aKlicke §ehier§a um das Grundstück §e" + name + "§a zu löschen!!");
                     component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/plot deleteconfirm " + name));
                     component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§eHier Klicken!!").create()));
                     p.spigot().sendMessage(component);
-                } else {
-                    p.sendMessage(prefix + "§cDas Grundstück gehört jemandem!");
-                }
             } else {
                 p.sendMessage(prefix + "§cDas Grundstück §e" + name + "§c existiert nicht!");
             }
@@ -396,6 +394,22 @@ public class cmd_plot {
             }
         } else {
             sender.sendMessage(prefix + "§cDas Grundstück§e " + name + "§c gibt es nicht!");
+        }
+    }
+
+    @PXCommand(
+            name = "edges",
+            parent = "plot",
+            minArgs = 1,
+            maxArgs = 1,
+            noConsole = true
+    )
+    public void edges(Player p, String name) {
+        if (Plot.isPlotExists(name)) {
+            List<BlockVector2> points = regions.getRegion(name).getPoints();
+            p.sendMessage(prefix + "Ecken: (§e" + points.get(0).getBlockX() + "§7|§e" + points.get(0).getBlockZ() + "§7) und (§e" + points.get(1).getBlockX() + "§7|§e" + points.get(1).getBlockZ() + "§7)");
+        } else {
+            p.sendMessage(prefix + "§cDas Grundstück§e " + name + "§c gibt es nicht!");
         }
     }
 

@@ -84,6 +84,7 @@ public class Main extends JavaPlugin implements Plugin {
         register(new cmd_ping(), this);
         register(new cmd_job(), this);
         register(new cmd_dukaten(), this);
+        register(new cmd_bankaccount(), this);
         register(new cmd_auftrag(), this);
     }
 
@@ -107,6 +108,7 @@ public class Main extends JavaPlugin implements Plugin {
         MySQL_SafeChest.createUserTable();
         MySQL_Plot.createPlotTable();
         MySQL_Plot.createPlotMemberTable();
+        MySQL_Bank.createBankTable();
         MySQL_Auftrag.createAuftragTable();
     }
 

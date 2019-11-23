@@ -54,7 +54,6 @@ public class Zuechter implements Listener {
                         BlockVector2 bv1 = Data.regions.getRegion(plot).getPoints().get(1);
                         Location loc = dead.getLocation();
                         if (bv0.getBlockX() < loc.getBlockX() && loc.getBlockX() < bv1.getBlockX() || bv1.getBlockX() < loc.getBlockX() && loc.getBlockX() < bv0.getBlockX()) {
-                            System.out.println();
                             if (bv0.getBlockZ() < loc.getBlockZ() && loc.getBlockZ() < bv1.getBlockX() || bv1.getBlockZ() < loc.getBlockZ() && loc.getBlockZ() < bv0.getBlockZ()) {
                                 onPlotOfZuechter[0] = true;
                             }

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
@@ -24,6 +25,10 @@ public class MySQL_Bank {
         MySQL.update("INSERT INTO bank VALUES('" + user + "', " + dukaten + ", " + dukaten * (getZins(hours) + 1) + " '" + sdf.format(time) + "')");
     }
 
+    public static void closeBankAccount(int id) {
+        MySQL.update("DELETE FROM bank WHERE id = " + id);
+    }
+
     public static HashMap<Integer, LocalDateTime> getBankAccounts(UUID uuid) {
         HashMap<Integer, LocalDateTime> map = new HashMap<>();
         try {
@@ -37,7 +42,7 @@ public class MySQL_Bank {
         return map;
     }
 
-    public static long getStartmoney(int id) {
+    public static long getStartMoney(int id) {
         try {
             ResultSet rs = MySQL.querry("SELECT startmoney WHERE id = " + id);
             while (rs.next()) {
@@ -49,7 +54,7 @@ public class MySQL_Bank {
         return -1;
     }
 
-    public static long getEndmoney(int id) {
+    public static long getEndMoney(int id) {
         try {
             ResultSet rs = MySQL.querry("SELECT endmoney WHERE id = " + id);
             while (rs.next()) {
@@ -75,6 +80,10 @@ public class MySQL_Bank {
 
 
     public static double getZins(int hours) {
-        return hours / 10 * 0.01;
+        return hours / 12 * 0.01;
+    }
+
+    public static boolean isRecieveable(int id) {
+        return (LocalDateTime.ofInstant(Instant.now(), ZoneId.of("ECT")).isAfter(getEndTime(id)));
     }
 }

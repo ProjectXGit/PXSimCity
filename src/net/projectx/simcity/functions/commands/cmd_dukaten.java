@@ -80,8 +80,8 @@ public class cmd_dukaten {
     @PXCommand(
             name = "get",
             usage = "/dukaten get <Player>",
-            maxArgs = 2,
-            minArgs = 2,
+            maxArgs = 1,
+            minArgs = 1,
             parent = "dukaten"
     )
     public void get(CommandSender sender, String name) {
