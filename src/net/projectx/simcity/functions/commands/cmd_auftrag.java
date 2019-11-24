@@ -7,6 +7,7 @@ import net.projectx.simcity.functions.mysql.MySQL_Plot;
 import net.projectx.simcity.functions.mysql.MySQL_User;
 import net.projectx.simcity.main.Data;
 import net.projectx.simcity.util.command.PXCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import org.bukkit.command.Command;
@@ -17,6 +18,7 @@ import java.awt.datatransfer.StringSelection;
 import java.math.BigInteger;
 import java.util.UUID;
 
+import static net.projectx.simcity.main.Data.playtime;
 import static net.projectx.simcity.main.Data.prefix;
 
 public class cmd_auftrag {
@@ -34,9 +36,9 @@ public class cmd_auftrag {
         add("delete", "Löscht einen Auftrag");
         add("list", "Gibt alle Aufträge aus");
         add("belohnung", "Gibt die Belohung eines Auftrags aus");
-        add("belohnungChange", "Ändert die Belohnung");
+        add("belohnungchange", "Ändert die Belohnung");
         add("beschreibung", "Gibt die Beschreibung eines Auftrags aus");
-        add("setBeschreibung", "Setzt ode ändert die Beschreibung");
+        add("setbeschreibung", "Setzt oder ändert die Beschreibung");
         add("accept", "Nimmt einen Auftrag an");
         add("reject", "Lehnt einen Auftrag ab");
         add("abschluss", "Der Auftrag wird abgeschlossen und der Spieler erhält die Belohnung.");
@@ -75,39 +77,52 @@ public class cmd_auftrag {
 
     @PXCommand(
             name = "create",
-            minArgs = 3,
+            minArgs = 2,
             maxArgs = 3,
-            usage = "/auftrag create <auftragname> <plot> <belohnung>",
+            usage = "/auftrag create <auftragname> <belohnung> [<plot>] ",
             parent = "auftrag",
             noConsole = true
     )
-    public void create(CommandSender sender, String auftragname, String plot, Integer belohnung) {
+    public void create(CommandSender sender, String auftragname, Integer belohnung, String plot) {
         Player p = (Player) sender;
         UUID uuid = p.getUniqueId();
-        if (!MySQL_Auftrag.getAuftraege().contains(auftragname)) {
-            if (MySQL_Plot.getPlots().contains(plot)) {
-                MySQL_Auftrag.createAuftrag(auftragname, plot, belohnung);
-            } else {
-                sender.sendMessage("§cDieses Grundstück gibt es nicht.");
-            }
-        } else {
-            sender.sendMessage("§cEs gibt bereits einen Auftrag mit diesem Namen.");
-        }
+       if(plot == null){
+           if(!MySQL_Auftrag.getAuftraege().contains(auftragname)){
+               MySQL_Auftrag.createAuftrag(auftragname, plot, belohnung);
+               p.sendMessage("§eDer Auftrag§6 " + auftragname + "§e wurde erstellt.");
+           }
+       }else{
+           if (!MySQL_Auftrag.getAuftraege().contains(auftragname)) {
+               if (MySQL_Plot.getPlots().contains(plot)) {
+                   MySQL_Auftrag.createAuftrag(auftragname, plot, belohnung);
+                   p.sendMessage("§eDer Auftrag§6 " + auftragname + "§e wurde erstellt.");
+               } else {
+                   sender.sendMessage("§cDieses Grundstück gibt es nicht.");
+               }
+           } else {
+               sender.sendMessage("§cEs gibt bereits einen Auftrag mit diesem Namen.");
+           }
+       }
     }
 
     @PXCommand(
             name = "setbeschreibung",
             usage = "/auftrag setbeschreibung <auftragname> <auftragsbeschreibung>",
             minArgs = 2,
-            maxArgs = 100,
+            maxArgs = 2,
             parent = "auftrag"
     )
-    public void setBeschreibung(CommandSender sender, String auftragname, String[] beschreibung){
+    public void setbeschreibung(CommandSender sender, String auftragname, String... beschreibung){
+        Player p = (Player) sender;
+        UUID uuid = p.getUniqueId();
+        p.sendMessage("Beschreibung wird bearbeitet");
         String description = "";
-        for(int i = 0; i < beschreibung.length; i++){
+        for (int i = 0;i<beschreibung.length;i++){
             description = description + " " + beschreibung[i];
-            MySQL_Auftrag.setBeschreibung(auftragname, description);
         }
+        p.sendMessage(description);
+        MySQL_Auftrag.setBeschreibung(auftragname, description);
+        p.sendMessage("Beschreibung wurde gesetzt");
     }
 
     @PXCommand(
@@ -119,7 +134,15 @@ public class cmd_auftrag {
     )
     public void delete(CommandSender sender, String auftragname) {
         if (MySQL_Auftrag.getAuftraege().contains(auftragname)) {
-            MySQL_Auftrag.deleteAuftrag(auftragname);
+            if(MySQL_Auftrag.getPlot(auftragname)==null) {
+                MySQL_Auftrag.deleteAuftrag(auftragname);
+                sender.sendMessage("§eDer Auftrag §6" + auftragname + "§e wurde gelöscht.");
+            }else{
+                MySQL_Plot.removeMember(MySQL_User.getUUID(MySQL_Auftrag.getAuftragOwner(auftragname)),MySQL_Auftrag.getPlot(auftragname));
+                MySQL_Auftrag.deleteAuftrag(auftragname);
+                sender.sendMessage("§eDer Auftrag §6" + auftragname + "§e wurde gelöscht.");
+
+            }
         } else {
             sender.sendMessage("§cDiesen Auftrag gibt es nicht.");
         }
@@ -137,15 +160,30 @@ public class cmd_auftrag {
         Player p = (Player) sender;
         UUID uuid = p.getUniqueId();
         String plot = MySQL_Auftrag.getPlot(auftragname);
-        if (MySQL_Auftrag.getAuftraege().contains(auftragname)) {
-            if (MySQL_Auftrag.getAuftraegeFrei().contains(auftragname)) {
-                MySQL_Auftrag.acceptAuftrag(auftragname, sender.getName());
-                MySQL_Plot.addMember(uuid, plot);
+        if(plot == null){
+            if (MySQL_Auftrag.getAuftraege().contains(auftragname)) {
+                if (MySQL_Auftrag.getAuftraegeFrei().contains(auftragname)) {
+                    MySQL_Auftrag.acceptAuftrag(auftragname, sender.getName());
+
+                    p.sendMessage("§eDu hast den Auftrag §6" + auftragname + " §eangenommen.");
+                } else {
+                    sender.sendMessage("§cDieser Auftrag ist bereits an §6" + MySQL_Auftrag.getAuftragOwner(auftragname) + " §cvergeben.");
+                }
             } else {
-                sender.sendMessage("§cDieser Auftrag ist bereits an " + MySQL_Auftrag.getAuftragOwner(auftragname) + " vergeben.");
+                sender.sendMessage("§cDiesen Auftrag gibt es nicht.");
             }
-        } else {
-            sender.sendMessage("§cDiesen Auftrag gibt es nicht.");
+        }else{
+            if (MySQL_Auftrag.getAuftraege().contains(auftragname)) {
+                if (MySQL_Auftrag.getAuftraegeFrei().contains(auftragname)) {
+                    MySQL_Auftrag.acceptAuftrag(auftragname, sender.getName());
+                    MySQL_Plot.addMember(uuid, plot);
+                    p.sendMessage("§eDu hast den Auftrag §6" + auftragname + " §eangenommen und bist jetzt ein Mitglied des Grundstücks §6" + plot + "§e.");
+                } else {
+                    sender.sendMessage("§cDieser Auftrag ist bereits an §6" + MySQL_Auftrag.getAuftragOwner(auftragname) + " §cvergeben.");
+                }
+            } else {
+                sender.sendMessage("§cDiesen Auftrag gibt es nicht.");
+            }
         }
     }
 
@@ -161,32 +199,52 @@ public class cmd_auftrag {
         Player p = (Player) sender;
         UUID uuid = p.getUniqueId();
         String plot = MySQL_Auftrag.getPlot(auftragname);
-        if (MySQL_Auftrag.getAuftraege().contains(auftragname)) {
-            if (!MySQL_Auftrag.getAuftraegeFrei().contains(auftragname)) {
-                if (MySQL_Auftrag.getAuftragOwner(auftragname).equalsIgnoreCase(p.getName())) {
-                    MySQL_Auftrag.rejectAuftrag(auftragname);
-                    MySQL_Plot.removeMember(uuid,plot);
+        if(plot == null){
+            if (MySQL_Auftrag.getAuftraege().contains(auftragname)) {
+                if (!MySQL_Auftrag.getAuftraegeFrei().contains(auftragname)) {
+                    if (MySQL_Auftrag.getAuftragOwner(auftragname).equalsIgnoreCase(p.getName())) {
+                        MySQL_Auftrag.rejectAuftrag(auftragname);
+
+                        p.sendMessage("§eDer Auftrag §6" + auftragname + " §eist jetzt wieder frei.");
+                    } else {
+                        sender.sendMessage("§cDiesen Auftrag hast du nicht angenommen. Er wird von §a" + MySQL_Auftrag.getAuftragOwner(auftragname) + " §ebearbeitet.");
+                    }
                 } else {
-                    sender.sendMessage("§cDiesen Auftrag hast du nicht angenommen. Er wird von " + MySQL_Auftrag.getAuftragOwner(auftragname) + " bearbeitet.");
+                    sender.sendMessage("§cDieser Auftrag ist frei.");
                 }
             } else {
-                sender.sendMessage("§cDieser Auftrag ist frei.");
+                sender.sendMessage("§cDiesen Auftrag gibt es nicht.");
             }
-        } else {
-            sender.sendMessage("§cDiesen Auftrag gibt es nicht.");
+        }else {
+            if (MySQL_Auftrag.getAuftraege().contains(auftragname)) {
+                if (!MySQL_Auftrag.getAuftraegeFrei().contains(auftragname)) {
+                    if (MySQL_Auftrag.getAuftragOwner(auftragname).equalsIgnoreCase(p.getName())) {
+                        MySQL_Auftrag.rejectAuftrag(auftragname);
+                        MySQL_Plot.removeMember(uuid, plot);
+                        p.sendMessage("§eDer Auftrag §6" + auftragname + " §eist jetzt wieder frei. Du bist nicht mehr Mitglied des Grundstücks §6" + plot + "§e.");
+                    } else {
+                        sender.sendMessage("§cDiesen Auftrag hast du nicht angenommen. Er wird von §a" + MySQL_Auftrag.getAuftragOwner(auftragname) + " §ebearbeitet.");
+                    }
+                } else {
+                    sender.sendMessage("§cDieser Auftrag ist frei.");
+                }
+            } else {
+                sender.sendMessage("§cDiesen Auftrag gibt es nicht.");
+            }
         }
     }
 
     @PXCommand(
-            name = "belohnungChange",
-            usage = "/auftrag belohnungChange <auftragname> <belohnung>",
+            name = "belohnungchange",
+            usage = "/auftrag belohnungchange <auftragname> <belohnung>",
             minArgs = 2,
             maxArgs = 2,
             parent = "auftrag"
     )
-    public void belohnungChange(CommandSender sender, String auftragname, BigInteger belohnung) {
+    public void belohnungchange(CommandSender sender, String auftragname, Integer belohnung) {
         if (MySQL_Auftrag.getAuftraege().contains(auftragname)) {
             MySQL_Auftrag.changeBelohnung(auftragname, belohnung);
+            sender.sendMessage("§eDie Belohnung des Auftrags §6" + auftragname + " §ewurde auf " + belohnung + " geändert.");
         } else {
             sender.sendMessage("§cDiesen Auftrag gibt es nicht.");
         }
@@ -201,7 +259,7 @@ public class cmd_auftrag {
     )
     public void belohnung(CommandSender sender, String auftragname) {
         if (MySQL_Auftrag.getAuftraege().contains(auftragname)) {
-            sender.sendMessage(prefix + "§e " + auftragname + "§7:§e " + MySQL_Auftrag.getAuftragsBelohnung(auftragname));
+            sender.sendMessage(prefix + "§e " + auftragname + "§7:§e " + MySQL_Auftrag.getAuftragsBelohnung(auftragname) + " §eDukaten.");
         } else {
             sender.sendMessage("§cDiesen Auftrag gibt es nicht.");
         }
@@ -216,7 +274,7 @@ public class cmd_auftrag {
     )
     public void beschreibung(CommandSender sender, String auftragname) {
         if (MySQL_Auftrag.getAuftraege().contains(auftragname)) {
-            sender.sendMessage(prefix + "§e " + auftragname + "§7,§e " + MySQL_Auftrag.getAuftragsBeschreibung(auftragname));
+            sender.sendMessage(prefix + "§6 " + auftragname + "§7:§e " + MySQL_Auftrag.getAuftragsBeschreibung(auftragname));
         } else {
             sender.sendMessage("§cDiesen Auftrag gibt es nicht.");
         }
@@ -233,9 +291,9 @@ public class cmd_auftrag {
 
         if (MySQL_Auftrag.getAuftraege().contains(auftragname)) {
             if (!MySQL_Auftrag.getAuftraegeFrei().contains(auftragname)) {
-                String Playername = MySQL_Auftrag.getAuftragOwner(auftragname);
-                add(sender, MySQL_Auftrag.getAuftragsBelohnung(auftragname), Playername);
-                MySQL_Auftrag.deleteAuftrag(auftragname);
+                    String Playername = MySQL_Auftrag.getAuftragOwner(auftragname);
+                    add(sender, MySQL_Auftrag.getAuftragsBelohnung(auftragname), Playername);
+                    delete(sender,auftragname);
             }else{
                 sender.sendMessage("§cDieser Auftrag ist frei.");
             }
@@ -253,6 +311,7 @@ public class cmd_auftrag {
         if (MySQL_User.isUserExists(name)) {
             MySQL_User.addDukaten(dukaten, MySQL_User.getUUID(name));
             sender.sendMessage("§e" + dukaten + "§a Dukaten wurden hinzugefügt!");
+
         } else {
             sender.sendMessage(prefix + "Der Spieler existiert nicht!");
         }

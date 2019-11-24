@@ -15,6 +15,9 @@ public class MySQL_Auftrag {
     public static void createAuftrag(String auftragname, String plot, Integer belohnung){
         MySQL.update("INSERT INTO auftrag VALUES ('" + auftragname + "', 'null', 'null', '" + plot + "', '" + belohnung + "')");
     }
+    public static void createAuftrag(String auftragname, Integer belohnung){
+        MySQL.update("INSERT INTO auftrag VALUES ('" + auftragname + "', 'null', 'null', 'null', '" + belohnung + "')");
+    }
     public static void setBeschreibung(String auftragname, String beschreibung){
         MySQL.update("UPDATE auftrag SET auftragsbeschreibung = '" + beschreibung + "' WHERE auftragname = '" + auftragname + "'");
     }
@@ -121,7 +124,7 @@ public class MySQL_Auftrag {
         MySQL.update("UPDATE auftrag SET spielername = 'null' WHERE auftragname = '" + auftragname + "'");
     }
 
-    public static void changeBelohnung(String auftragname, BigInteger belohnung){
+    public static void changeBelohnung(String auftragname, Integer belohnung){
         MySQL.update("UPDATE auftrag SET belohnung = '" + belohnung + "' WHERE auftragname = '" + auftragname + "'");
     }
 }
