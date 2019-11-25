@@ -23,6 +23,7 @@ public class Tablist {
     static String port;
     static String ranks;
 
+    private Team alchimist;
     private Team buergermeister;
     private Team foerster;
     private Team miner;
@@ -43,6 +44,7 @@ public class Tablist {
 
 
     public void createTablist() {
+        this.alchimist = sb.getTeam("9i") ==null ? sb.registerNewTeam("9i") : sb.getTeam("9i");
         this.buergermeister = sb.getTeam("1a") == null ? sb.registerNewTeam("1a") : sb.getTeam("1a");
         this.foerster = sb.getTeam("2b") == null ? sb.registerNewTeam("2b") : sb.getTeam("2b");
         this.miner = sb.getTeam("3c") == null ? sb.registerNewTeam("3c") : sb.getTeam("3c");
@@ -53,6 +55,7 @@ public class Tablist {
         this.arbeitslos = sb.getTeam("8h") == null ? sb.registerNewTeam("8h") : sb.getTeam("8h");
 
 
+        this.alchimist.setPrefix("§8[§6Bürgermeister§8]§7 ");
         this.buergermeister.setPrefix("§8[§1Bürgermeister§8]§7 ");
         this.foerster.setPrefix("§8[§2Förster§8]§7 ");
         this.miner.setPrefix("§8[§3Miner§8]§7 ");
@@ -92,6 +95,8 @@ public class Tablist {
             team = "6f";
         } else if (MySQL_User.getJob(p.getUniqueId()).equalsIgnoreCase("Tierzuechter")) {
             team = "7g";
+        } else if (MySQL_User.getJob(p.getUniqueId()).equalsIgnoreCase("Alchimist")) {
+            team = "9i";
         } else {
             team = "8h";
         }

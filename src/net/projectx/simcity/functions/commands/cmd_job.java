@@ -49,6 +49,7 @@ public class cmd_job {
     public void list(CommandSender sender){
         builder = new StringBuilder();
         builder.append(prefix + "§7§lJobübersicht:§r\n");
+        add2("§6Alchimist§7: Kann Tränke brauen und Zaubertische nutzen");
         add2("§1Buergermeister§7: Hat Macht über Grundstücke und Spieler");
         add2("§4Elektriker§7: Redstone-Schaltungen sind seine Spezialität");
         add2("§5Farmer§7: Meister der Pflanzen");
@@ -71,7 +72,7 @@ public class cmd_job {
         String job = jobs;
         Player p = (Player) sender;
         UUID uuid = p.getUniqueId();
-        if(jobs.equalsIgnoreCase("Foerster")||jobs.equalsIgnoreCase("Farmer")||jobs.equalsIgnoreCase("Buergermeister")||jobs.equalsIgnoreCase("Elektriker")||jobs.equalsIgnoreCase("Miner")||jobs.equalsIgnoreCase("Schmied")||jobs.equalsIgnoreCase("Tierzuechter")) {
+        if(jobs.equalsIgnoreCase("Foerster")||jobs.equalsIgnoreCase("Farmer")||jobs.equalsIgnoreCase("Buergermeister")||jobs.equalsIgnoreCase("Elektriker")||jobs.equalsIgnoreCase("Miner")||jobs.equalsIgnoreCase("Schmied")||jobs.equalsIgnoreCase("Tierzuechter")||jobs.equalsIgnoreCase("Alchimist")) {
             TextComponent component = new TextComponent();
             component.setText(prefix + "§aKlicke §ehier§a um den Job §e" + jobs + "§a auszuwählen!");
             component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/job confirm " + jobs));
@@ -94,7 +95,7 @@ public class cmd_job {
         String job = jobs;
         Player p = (Player) sender;
         UUID uuid = p.getUniqueId();
-        if (jobs.equalsIgnoreCase("Foerster") || jobs.equalsIgnoreCase("Farmer") || jobs.equalsIgnoreCase("Elektriker") || jobs.equalsIgnoreCase("Miner") || jobs.equalsIgnoreCase("Schmied") || jobs.equalsIgnoreCase("Tierzuechter")) {
+        if (jobs.equalsIgnoreCase("Alchimist")||jobs.equalsIgnoreCase("Foerster") || jobs.equalsIgnoreCase("Farmer") || jobs.equalsIgnoreCase("Elektriker") || jobs.equalsIgnoreCase("Miner") || jobs.equalsIgnoreCase("Schmied") || jobs.equalsIgnoreCase("Tierzuechter")) {
             final boolean[] found = {false};
             Bukkit.getOnlinePlayers().forEach(entry -> {
                 if (MySQL_User.getJob(entry.getUniqueId()).equals("Buergermeister")) {

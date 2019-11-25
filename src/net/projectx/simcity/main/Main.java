@@ -93,6 +93,7 @@ public class Main extends JavaPlugin implements Plugin {
     public void registerListener() {
         Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new SafeChest(), this);
+        Bukkit.getPluginManager().registerEvents(new Alchimist(), this);
         Bukkit.getPluginManager().registerEvents(new Foerster(), this);
         Bukkit.getPluginManager().registerEvents(new Miner(), this);
         Bukkit.getPluginManager().registerEvents(new Schmied(), this);
