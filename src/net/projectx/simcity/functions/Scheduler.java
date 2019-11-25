@@ -26,9 +26,9 @@ public class Scheduler {
     public static BukkitTask scheduler;
     static int animation = 0;
     static int ticks = 0;
-    static String animation0 = "§f§o❄❄☃❄❄☃❄❄☃❄❄☃❄❄☃";
-    static String animation1 = "§f§o❄☃❄❄☃❄❄☃❄❄☃❄❄☃❄";
-    static String animation2 = "§f§o☃❄❄☃❄❄☃❄❄☃❄❄☃❄❄";
+    static String animation0 = "§f§o❄❄☃❄❄☃❄❄☃❄❄☃";
+    static String animation1 = "§f§o❄☃❄❄☃❄❄☃❄❄☃❄";
+    static String animation2 = "§f§o☃❄❄☃❄❄☃❄❄☃❄❄";
 
 
     public static void startScheduler() {

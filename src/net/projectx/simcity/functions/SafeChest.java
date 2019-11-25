@@ -49,7 +49,7 @@ public class SafeChest implements Listener {
         UUID uuid = event.getPlayer().getUniqueId();
         Location loc = event.getBlock().getLocation();
         Location against = event.getBlockAgainst().getLocation();
-        if (event.getBlock().getType().equals(Material.OAK_WALL_SIGN)) {
+        if (event.getBlock().getType().toString().endsWith("_WALL_SIGN")) {
 
             if (event.getBlockAgainst().getType().equals(Material.CHEST)) {
                 if (!MySQL_SafeChest.isSafeChest(against)) {

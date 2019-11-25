@@ -10,11 +10,9 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class CommandProcessor<S> {
@@ -67,16 +65,19 @@ public class CommandProcessor<S> {
         boolean hasPermission = false;
         if (command.permissions().length > 0) {
             for (String permission : command.permissions()) {
-                if (masterCommand.checkPermission(sender, permission) || masterCommand.checkPermission(sender, "aw." + permission)) {
+                if (masterCommand.checkPermission(sender, permission) || masterCommand.checkPermission(sender, "px." + permission)) {
                     hasPermission = true;
                     break;
                 }
             }
         } else {
+            hasPermission = true;
+            /*
             List<String> permParts = new ArrayList<>(Arrays.asList(command.parent()));
             permParts.add(command.name());
             String permission = permParts.stream().map(perm -> perm.equals("%") ? "any" : perm).collect(Collectors.joining("."));
             hasPermission = masterCommand.checkPermission(sender, "aw." + permission);
+            */
         }
         if (!hasPermission) {
             ((Player) sender).sendMessage(Data.noperm);

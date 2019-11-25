@@ -22,7 +22,7 @@ public class MySQL_User {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time = Date.from(Instant.now());
         String ip = "" + p.getAddress().getAddress().getHostAddress();
-        MySQL.update("INSERT INTO `user` VALUES ('" + p.getName() + "','" + p.getUniqueId().toString() + "', '" + ip + "', 0, '', 0, '" + sdf.format(time) + "')");
+        MySQL.update("INSERT INTO `user` VALUES ('" + p.getName() + "','" + p.getUniqueId().toString() + "', '" + ip + "', 5000, '', 0, '" + sdf.format(time) + "')");
     }
 
     public static boolean isUserExists(UUID uuid) {

@@ -4,15 +4,13 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.projectx.simcity.functions.Plot;
 import net.projectx.simcity.functions.mysql.MySQL_User;
 import net.projectx.simcity.main.Data;
 import net.projectx.simcity.util.command.PXCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -96,11 +94,51 @@ public class cmd_job {
         String job = jobs;
         Player p = (Player) sender;
         UUID uuid = p.getUniqueId();
-        if (jobs.equalsIgnoreCase("Foerster")||jobs.equalsIgnoreCase("Farmer")||jobs.equalsIgnoreCase("Buergermeister")||jobs.equalsIgnoreCase("Elektriker")||jobs.equalsIgnoreCase("Miner")||jobs.equalsIgnoreCase("Schmied")||jobs.equalsIgnoreCase("Tierzuechter")) {
-            MySQL_User.setJob(job, uuid);
-            p.sendMessage("§eDu arbeitetest jetzt als "+ MySQL_User.getJob(uuid));
+        if (jobs.equalsIgnoreCase("Foerster") || jobs.equalsIgnoreCase("Farmer") || jobs.equalsIgnoreCase("Elektriker") || jobs.equalsIgnoreCase("Miner") || jobs.equalsIgnoreCase("Schmied") || jobs.equalsIgnoreCase("Tierzuechter")) {
+            final boolean[] found = {false};
+            Bukkit.getOnlinePlayers().forEach(entry -> {
+                if (MySQL_User.getJob(entry.getUniqueId()).equals("Buergermeister")) {
+                    found[0] = true;
+                    TextComponent component = new TextComponent();
+                    component.setText(prefix + "§aKlicke §ehier§a um den Jobwechsel von §e" + p.getName() + "§a zu §e" + jobs + "§a anzunehmen!");
+                    component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/job accept " + jobs + " " + p.getName()));
+                    component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§eHier Klicken!!").create()));
+                    entry.spigot().sendMessage(component);
+                }
+            });
+            if (found[0]) {
+                sender.sendMessage(prefix + "§aDie Anfrage wurde an den Bürgermeister weitergeleitet!");
+            } else {
+                p.sendMessage(prefix + "§cDer Bürgermeister ist aktuell nicht online! Er muss online sein um deinen Jobwechsel zu akzeptieren!");
+            }
         }else{
             p.sendMessage("§cDen Job gibt es nicht.");
+        }
+    }
+
+    @PXCommand(
+            name = "accept",
+            minArgs = 2,
+            maxArgs = 2,
+            usage = "/job accept",
+            parent = "job",
+            noConsole = true
+    )
+    public void accept(Player p, String job, String name) {
+        if (MySQL_User.getJob(p.getUniqueId()).equals("Buergermeister")) {
+            final boolean[] found = {false};
+            Bukkit.getOnlinePlayers().forEach(entry -> {
+                if (entry.getName().equals(name)) {
+                    MySQL_User.setJob(job, entry.getUniqueId());
+                    entry.sendMessage("§eDu arbeitetest jetzt als " + job);
+                    found[0] = true;
+                }
+            });
+            if (found[0]) {
+                p.sendMessage(prefix + "§aDer Job von §e" + name + " wurde gewechselt!");
+            } else {
+                p.sendMessage(prefix + "Der Spieler ist scheinbar offline gegangen!");
+            }
         }
     }
 
